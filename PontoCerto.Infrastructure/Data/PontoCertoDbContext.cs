@@ -7,7 +7,7 @@ namespace PontoCerto.Infrastructure.Data
     {
         public PontoCertoDbContext(DbContextOptions<PontoCertoDbContext> options) : base(options) { }
         public DbSet<Pessoa> Pessoas { get; set; }
-        public DbSet<RegistroPonto> RegistroPontos { get; set; }
+        public DbSet<RegistroPonto> RegistrosPontos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
