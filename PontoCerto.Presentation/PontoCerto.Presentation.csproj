@@ -8,12 +8,6 @@
 
   <ItemGroup>
     <None Remove="Views\Home\Index.cshtml" />
-    <None Remove="Views\Home\Privacy.cshtml" />
-    <None Remove="Views\Shared\Error.cshtml" />
-    <None Remove="Views\Shared\_Layout.cshtml" />
-    <None Remove="Views\Shared\_ValidationScriptsPartial.cshtml" />
-    <None Remove="Views\_ViewImports.cshtml" />
-    <None Remove="Views\_ViewStart.cshtml" />
     <None Remove="wwwroot\css\site.css" />
     <None Remove="wwwroot\favicon.ico" />
     <None Remove="wwwroot\js\site.js" />
@@ -78,30 +72,6 @@
 
   <ItemGroup>
     <Content Include="Views\Home\Index.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="Views\Home\Privacy.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="Views\Shared\Error.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="Views\Shared\_Layout.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="Views\Shared\_ValidationScriptsPartial.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="Views\_ViewImports.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="Views\_ViewStart.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
@@ -354,6 +324,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PontoCerto.Application\PontoCerto.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Pessoa\" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿using PontoCerto.Application.DTOs.RegistroPonto;
+﻿using PontoCerto.Application.DTOs;
 using PontoCerto.Domain.Entities;
 
 namespace PontoCerto.Application.Interfaces

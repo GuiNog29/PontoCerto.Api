@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using PontoCerto.Domain.Entities;
-using PontoCerto.Application.DTOs.Pessoa;
-using PontoCerto.Application.DTOs.RegistroPonto;
+using PontoCerto.Application.DTOs;
 
 namespace PontoCerto.Application.Mappings
 {

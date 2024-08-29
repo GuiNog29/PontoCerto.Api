@@ -2,7 +2,7 @@
 using PontoCerto.Domain.Entities;
 using PontoCerto.Domain.Interfaces;
 using PontoCerto.Application.Interfaces;
-using PontoCerto.Application.DTOs.Pessoa;
+using PontoCerto.Application.DTOs;
 
 namespace PontoCerto.Application.Services
 {

@@ -1,4 +1,4 @@
-﻿using PontoCerto.Application.DTOs.Pessoa;
+﻿using PontoCerto.Application.DTOs;
 
 namespace PontoCerto.Application.Interfaces
 {
