@@ -1,4 +1,5 @@
-﻿using Swashbuckle.AspNetCore.Annotations;
+﻿using PontoCerto.Application.DTOs.RegistroPonto;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace PontoCerto.Application.DTOs
 {

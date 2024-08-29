@@ -1,10 +1,9 @@
-﻿using Swashbuckle.AspNetCore.Annotations;
+﻿using PontoCerto.Application.DTOs.Pessoa;
 
 namespace PontoCerto.Application.DTOs
 {
     public class RegistroPontoDto
     {
-        [SwaggerSchema(ReadOnly = true)]
         public int Id { get; set; }
         public DateTime Data { get; set; }
         public TimeSpan HoraEntrada { get; set; }

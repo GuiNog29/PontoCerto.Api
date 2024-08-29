@@ -6,8 +6,8 @@ namespace PontoCerto.Domain.Interfaces
     {
         Task<Pessoa> CadastrarPessoa(Pessoa pessoa);
         Task<Pessoa?> BuscarPessoaPorId(int pessoaId);
-        Task<bool> ExcluirPessoa(int pessoaId);
         Task<Pessoa> AtualizarPessoa(Pessoa pessoa);
+        Task<bool> ExcluirPessoa(int pessoaId);
         Task<IEnumerable<Pessoa>> BuscarTodasPessoas();
     }
 }

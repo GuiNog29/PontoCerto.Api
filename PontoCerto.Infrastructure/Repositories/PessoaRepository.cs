@@ -1,6 +1,6 @@
 ﻿using PontoCerto.Domain.Entities;
-using PontoCerto.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using PontoCerto.Domain.Interfaces;
 using PontoCerto.Infrastructure.Data;
 
 namespace PontoCerto.Infrastructure.Repositories
