@@ -11,6 +11,6 @@ namespace PontoCerto.Application.DTOs
         public TimeSpan HoraSaida { get; set; }
         public TimeSpan HoraAlmoco { get; set; }
         public int PessoaId { get; set; }
-        public PessoaDto? Pessoa { get; set; }
+        public required PessoaDto Pessoa { get; set; }
     }
 }

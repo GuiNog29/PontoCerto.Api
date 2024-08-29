@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PontoCerto.Domain.Entities;
 
 namespace PontoCerto.Domain.Interfaces
 {
     public interface IPessoaRepository
     {
+        Task<Pessoa> CadastrarPessoa(Pessoa pessoa);
+        Task<Pessoa?> BuscarPessoaPorId(int pessoaId);
+        Task<Pessoa> AtualizarPessoa(Pessoa pessoa);
+        Task<bool> ExcluirPessoa(int pessoaId);
+        Task<IEnumerable<Pessoa>> BuscarTodasPessoas();
     }
 }
