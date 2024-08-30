@@ -1,5 +1,10 @@
 @model PontoCerto.Application.DTOs.DepartamentoDto
 
+@{
+    ViewBag.Title = "Cadastrar Departamento";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
 <h2>Cadastrar Novo Departamento</h2>
 
 <form asp-action="CadastrarDepartamento" method="post">
@@ -7,7 +12,7 @@
 
     <div class="form-group">
         <label asp-for="Nome" class="control-label"></label>
-        <input asp-for="Nome" class="form-control" />
+        <input name="Nome" asp-for="Nome" class="form-control" placeholder="Insira o nome do departamento" />
         <span asp-validation-for="Nome" class="text-danger"></span>
     </div>
 
@@ -15,4 +20,4 @@
         <input type="submit" value="Cadastrar" class="btn btn-primary" />
     </div>
 </form>
-<a asp-action="Index" class="btn btn-secondary">Voltar</a>
+<a href="/Departamento" class="btn btn-secondary">Voltar</a>

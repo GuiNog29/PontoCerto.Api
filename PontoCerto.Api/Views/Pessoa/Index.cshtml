@@ -1,5 +1,10 @@
 @model IEnumerable<PontoCerto.Application.DTOs.PessoaDto>
 
+@{
+    ViewBag.Title = "Lista de Pessoas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
 <h2>Lista de Pessoas</h2>
 
 <table class="table">
@@ -17,13 +22,15 @@
                 <td>@item.Nome</td>
                 <td>@item.ValorHora.ToString("C")</td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a> |
-                    <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Excluir</a>
+                    <a asp-action="BuscarPessoaPorId" asp-route-pessoaId="@item.Id">Detalhes</a> |
+                    <a asp-action="AtualizarPessoa" asp-route-pessoaId="@item.Id">Editar</a> |
+                    <form asp-action="ExcluirPessoa" asp-route-pessoaId="@item.Id" method="post" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir esta pessoa?');">
+                        <button type="submit" class="btn btn-link">Excluir</button>
+                    </form>
                 </td>
             </tr>
         }
     </tbody>
 </table>
 
-<a asp-action="Create" class="btn btn-primary">Adicionar Nova Pessoa</a>
+<a href="/Pessoa/CadastrarPessoa" class="btn btn-primary">Adicionar Nova Pessoa</a>

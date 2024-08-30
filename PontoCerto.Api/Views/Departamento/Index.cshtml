@@ -1,5 +1,10 @@
 @model IEnumerable<PontoCerto.Application.DTOs.DepartamentoDto>
 
+@{
+    ViewBag.Title = "Lista Departamentos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
 <h2>Lista de Departamentos</h2>
 <table class="table">
     <thead>
@@ -26,4 +31,4 @@
         }
     </tbody>
 </table>
-<a asp-action="CadastrarDepartamento" class="btn btn-primary">Adicionar Novo Departamento</a>
+<a href="/Departamento/CadastrarDepartamento" class="btn btn-primary">Adicionar Novo Departamento</a>

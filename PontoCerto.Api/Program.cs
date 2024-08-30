@@ -9,7 +9,8 @@ using PontoCerto.Application.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+                .AddRazorRuntimeCompilation();
 builder.Services.AddControllers();
 
 // Configurar DbContext

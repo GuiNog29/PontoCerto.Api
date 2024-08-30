@@ -1,8 +1,13 @@
-@model PontoCerto.Application.DTOs.DepartamentoDto
+@model PontoCerto.Application.DTOs.PessoaDto
 
-<h2>Editar Departamento</h2>
+@{
+    ViewBag.Title = "Atualizar Pessoa";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
-<form asp-action="AtualizarDepartamento" method="post">
+<h2>Editar Pessoa</h2>
+
+<form asp-action="Edit" method="post">
     @Html.AntiForgeryToken()
     <input type="hidden" asp-for="Id" />
 
@@ -13,7 +18,14 @@
     </div>
 
     <div class="form-group">
+        <label asp-for="ValorHora" class="control-label"></label>
+        <input asp-for="ValorHora" class="form-control" type="number" step="0.01" />
+        <span asp-validation-for="ValorHora" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
         <input type="submit" value="Salvar" class="btn btn-primary" />
     </div>
 </form>
+
 <a asp-action="Index" class="btn btn-secondary">Voltar</a>
