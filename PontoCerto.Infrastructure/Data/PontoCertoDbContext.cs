@@ -6,6 +6,7 @@ namespace PontoCerto.Infrastructure.Data
     public class PontoCertoDbContext : DbContext
     {
         public PontoCertoDbContext(DbContextOptions<PontoCertoDbContext> options) : base(options) { }
+        public DbSet<Departamento> Departamentos { get; set; }
         public DbSet<Pessoa> Pessoas { get; set; }
         public DbSet<RegistroPonto> RegistrosPontos { get; set; }
 
@@ -14,15 +15,21 @@ namespace PontoCerto.Infrastructure.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<RegistroPonto>()
-                .HasOne(t => t.Pessoa)
-                .WithMany(u => u.RegistrosPontos)
-                .HasForeignKey(t => t.PessoaId)
+                .HasOne(x => x.Pessoa)
+                .WithMany(x => x.RegistrosPontos)
+                .HasForeignKey(x => x.PessoaId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Pessoa>()
                 .HasMany(x => x.RegistrosPontos)
                 .WithOne(x => x.Pessoa)
                 .HasForeignKey(x => x.PessoaId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Pessoa>()
+                .HasOne(x => x.Departamento)
+                .WithMany(x => x.Pessoas)
+                .HasForeignKey(x => x.DepartamentoId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

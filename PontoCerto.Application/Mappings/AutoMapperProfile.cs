@@ -10,6 +10,7 @@ namespace PontoCerto.Application.Mappings
         {
             CreateMap<Pessoa, PessoaDto>().ReverseMap();
             CreateMap<RegistroPonto, RegistroPontoDto>().ReverseMap();
+            CreateMap<Departamento, DepartamentoDto>().ReverseMap();
         }
     }
 }

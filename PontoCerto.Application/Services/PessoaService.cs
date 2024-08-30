@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using PontoCerto.Domain.Entities;
+using PontoCerto.Application.DTOs;
 using PontoCerto.Domain.Interfaces;
 using PontoCerto.Application.Interfaces;
-using PontoCerto.Application.DTOs;
 
 namespace PontoCerto.Application.Services
 {
@@ -67,7 +67,10 @@ namespace PontoCerto.Application.Services
             if (pessoaDto == null)
                 throw new ArgumentNullException(nameof(pessoaDto));
 
-            if (pessoaDto.ValorHora > 0)
+            if(pessoaDto.DepartamentoId <= 0)
+                throw new Exception("O valor do departamentoId deve ser maior que 0.");
+
+            if (pessoaDto.ValorHora <= 0)
                 throw new PessoaServiceException("O valor da hora do colaborador deve ser maior que 0.");
         }
     }

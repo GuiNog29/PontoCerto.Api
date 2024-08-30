@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PontoCerto.Application.DTOs.Erro;
+using PontoCerto.Application.DTOs;
 
 namespace PontoCerto.Application.Helpers
 {

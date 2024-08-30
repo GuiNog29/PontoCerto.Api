@@ -1,0 +1,34 @@
+@model IEnumerable<PontoCerto.Application.DTOs.DepartamentoDto>
+
+@{
+    ViewBag.Title = "Lista Departamentos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lista de Departamentos</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Valor Total Pago</th>
+            <th>Valor Total Descontado</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Nome</td>
+                <td>@item.ValorTotalPago.ToString("C")</td>
+                <td>@item.ValorTotalDescontado.ToString("C")</td>
+                <td>
+                    <a asp-action="BuscarDepartamentoPorId" asp-route-departamentoId="@item.Id">Detalhes</a> |
+                    <a asp-action="AtualizarDepartamento" asp-route-departamentoId="@item.Id">Editar</a> |
+                    <a asp-action="ExcluirDepartamento" asp-route-departamentoId="@item.Id">Excluir</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a href="/Departamento/CadastrarDepartamento" class="btn btn-primary">Adicionar Novo Departamento</a>

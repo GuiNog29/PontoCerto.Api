@@ -1,0 +1,23 @@
+@model PontoCerto.Application.DTOs.PessoaDto
+
+@{
+    ViewBag.Title = "Excluir Pessoa";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Excluir Pessoa</h2>
+
+<h3>Você realmente deseja excluir esta pessoa?</h3>
+
+<div>
+    <h4>@Model.Nome</h4>
+    <p>Valor Hora: @Model.ValorHora.ToString("C")</p>
+</div>
+
+<form asp-action="Delete" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <input type="submit" value="Excluir" class="btn btn-danger" />
+</form>
+
+<a asp-action="Index" class="btn btn-secondary">Cancelar</a>

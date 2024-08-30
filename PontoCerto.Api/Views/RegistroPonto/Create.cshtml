@@ -1,0 +1,43 @@
+@model PontoCerto.Application.DTOs.RegistroPontoDto
+
+<h2>Registrar Novo Ponto</h2>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken() <!-- Proteção contra CSRF -->
+
+    <div class="form-group">
+        <label asp-for="Data" class="control-label"></label>
+        <input asp-for="Data" class="form-control" type="date" />
+        <span asp-validation-for="Data" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Entrada" class="control-label"></label>
+        <input asp-for="Entrada" class="form-control" type="time" />
+        <span asp-validation-for="Entrada" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Saida" class="control-label"></label>
+        <input asp-for="Saida" class="form-control" type="time" />
+        <span asp-validation-for="Saida" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Almoço" class="control-label"></label>
+        <input asp-for="Almoço" class="form-control" type="time" />
+        <span asp-validation-for="Almoço" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="FuncionarioId" class="control-label">Funcionário</label>
+        <select asp-for="FuncionarioId" class="form-control" asp-items="ViewBag.Funcionarios"></select>
+        <span asp-validation-for="FuncionarioId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Registrar" class="btn btn-primary" />
+    </div>
+</form>
+
+<a asp-action="Index" class="btn btn-secondary">Voltar</a>

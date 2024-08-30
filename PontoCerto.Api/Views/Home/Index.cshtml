@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Página Inicial";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Bem-vindo à Aplicação de Gerenciamento de RH</h2>
+
+<p>Escolha uma das opções abaixo para continuar:</p>
+
+<div class="row">
+    <div class="col-md-4">
+        <a href="@Url.Action("Index", "Pessoa")" class="btn btn-primary btn-lg btn-block">Gerenciar Pessoas</a>
+    </div>
+    <div class="col-md-4">
+        <a href="@Url.Action("Index", "RegistroPonto")" class="btn btn-primary btn-lg btn-block">Gerenciar Registros de Ponto</a>
+    </div>
+    <div class="col-md-4">
+        <a href="@Url.Action("Index", "Departamento")" class="btn btn-primary btn-lg btn-block">Gerenciar Departamentos</a>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <a href="@Url.Action("LerArquivos", "Departamento")" class="btn btn-secondary btn-lg btn-block">Importar Registros de Ponto (CSV)</a>
+    </div>
+</div>
