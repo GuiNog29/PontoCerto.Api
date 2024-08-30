@@ -8,6 +8,6 @@ namespace PontoCerto.Application.DTOs
         public int Id { get; set; }
         public required string Nome { get; set; }
         public decimal ValorHora { get; set; }
-        public ICollection<RegistroPontoDto>? RegistrosPonto { get; set; }
+        public ICollection<RegistroPontoDto> RegistrosPonto { get; set; } = new List<RegistroPontoDto>();
     }
 }
