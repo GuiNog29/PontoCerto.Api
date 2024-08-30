@@ -1,18 +1,48 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+	<ItemGroup>
+		<Content Include="wwwroot\lib\jquery\LICENSE.txt">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="Views\Departamento\Create.cshtml" />
+		<None Include="Views\Departamento\Delete.cshtml" />
+		<None Include="Views\Departamento\Details.cshtml" />
+		<None Include="Views\Departamento\Edit.cshtml" />
+		<None Include="Views\Departamento\Index.cshtml" />
+		<None Include="Views\Home\uError.cshtml" />
+		<None Include="Views\Pessoa\Create.cshtml" />
+		<None Include="Views\Pessoa\Delete.cshtml" />
+		<None Include="Views\Pessoa\Details.cshtml" />
+		<None Include="Views\Pessoa\Edit.cshtml" />
+		<None Include="Views\Pessoa\Index.cshtml" />
+		<None Include="Views\RegistroPonto\Create.cshtml" />
+		<None Include="Views\RegistroPonto\Delete.cshtml" />
+		<None Include="Views\RegistroPonto\Details.cshtml" />
+		<None Include="Views\RegistroPonto\Edit.cshtml" />
+		<None Include="Views\RegistroPonto\Index.cshtml" />
+		<None Include="Views\Shared\_Layout.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\PontoCerto.Application\PontoCerto.Application.csproj" />
-    <ProjectReference Include="..\PontoCerto.Infrastructure\PontoCerto.Infrastructure.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\PontoCerto.Application\PontoCerto.Application.csproj" />
+		<ProjectReference Include="..\PontoCerto.Infrastructure\PontoCerto.Infrastructure.csproj" />
+	</ItemGroup>
 
 </Project>

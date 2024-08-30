@@ -1,0 +1,11 @@
+@model PontoCerto.Application.DTOs.DepartamentoDto
+
+<h2>Detalhes do Departamento</h2>
+
+<div>
+    <h4>@Model.Nome</h4>
+    <p>Valor Total Pago: @Model.ValorTotalPago.ToString("C")</p>
+    <p>Valor Total Descontado: @Model.ValorTotalDescontado.ToString("C")</p>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary">Voltar</a>

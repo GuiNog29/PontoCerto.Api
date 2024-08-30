@@ -3,7 +3,7 @@ using PontoCerto.Application.DTOs;
 using PontoCerto.Application.Helpers;
 using PontoCerto.Application.Interfaces;
 
-namespace PontoCerto.Presentation.Controllers
+namespace PontoCerto.Api.Controllers
 {
     public class DepartamentoController : Controller
     {

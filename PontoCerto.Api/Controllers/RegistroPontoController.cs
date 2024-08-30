@@ -2,9 +2,8 @@
 using PontoCerto.Application.DTOs;
 using PontoCerto.Application.Helpers;
 using PontoCerto.Application.Interfaces;
-using PontoCerto.Application.Services;
 
-namespace PontoCerto.Presentation.Controllers
+namespace PontoCerto.Api.Controllers
 {
     public class RegistroPontoController : Controller
     {

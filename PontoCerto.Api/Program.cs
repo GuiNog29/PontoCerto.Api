@@ -1,15 +1,16 @@
+using PontoCerto.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using PontoCerto.Application.Interfaces;
+using PontoCerto.Infrastructure.Data;
 using PontoCerto.Application.Mappings;
 using PontoCerto.Application.Services;
-using PontoCerto.Domain.Interfaces;
-using PontoCerto.Infrastructure.Data;
+using PontoCerto.Application.Interfaces;
 using PontoCerto.Infrastructure.Repositories;
-using System;
+using PontoCerto.Application.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddControllers();
 
 // Configurar DbContext
 builder.Services.AddDbContext<PontoCertoDbContext>(options =>
@@ -24,6 +25,7 @@ builder.Services.AddScoped<IRegistroPontoRepository, RegistroPontoRepository>();
 builder.Services.AddScoped<IDepartamentoService, DepartamentoService>();
 builder.Services.AddScoped<IPessoaService, PessoaService>();
 builder.Services.AddScoped<IRegistroPontoService, RegistroPontoService>();
+builder.Services.AddScoped<IValidadorErro, ValidadorErro>();
 
 // Configurar AutoMapper
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));

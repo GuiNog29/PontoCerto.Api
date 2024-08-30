@@ -1,0 +1,32 @@
+@model PontoCerto.Application.DTOs.PessoaDto
+
+<h2>Detalhes da Pessoa</h2>
+
+<div>
+    <h4>@Model.Nome</h4>
+    <p>Valor Hora: @Model.ValorHora.ToString("C")</p>
+    <h4>Registros de Ponto:</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Entrada</th>
+                <th>Saída</th>
+                <th>Almoço</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var registro in Model.RegistrosPonto)
+            {
+                <tr>
+                    <td>@registro.Data.ToShortDateString()</td>
+                    <td>@registro.HoraEntrada</td>
+                    <td>@registro.HoraSaida</td>
+                    <td>@registro.Almoco</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary">Voltar</a>

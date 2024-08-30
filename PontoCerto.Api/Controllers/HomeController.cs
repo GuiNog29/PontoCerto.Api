@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace PontoCerto.Presentation.Controllers
+namespace PontoCerto.Api.Controllers
 {
     public class HomeController : Controller
     {

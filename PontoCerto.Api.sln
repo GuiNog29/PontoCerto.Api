@@ -7,11 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PontoCerto.Api", "PontoCert
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PontoCerto.Application", "PontoCerto.Application\PontoCerto.Application.csproj", "{00FC7020-9B86-4128-8B08-929C0B6B9CCC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PontoCerto.Domain", "PontoCerto.Domain\PontoCerto.Domain.csproj", "{3FE1757B-A8AA-42BD-AA14-593B9663B7BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PontoCerto.Domain", "PontoCerto.Domain\PontoCerto.Domain.csproj", "{3FE1757B-A8AA-42BD-AA14-593B9663B7BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PontoCerto.Infrastructure", "PontoCerto.Infrastructure\PontoCerto.Infrastructure.csproj", "{C020DFD5-D98E-422E-8988-F39ABDC6D4FF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PontoCerto.Presentation", "PontoCerto.Presentation\PontoCerto.Presentation.csproj", "{94699E05-18A7-43A6-913D-2AED546265E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PontoCerto.Infrastructure", "PontoCerto.Infrastructure\PontoCerto.Infrastructure.csproj", "{C020DFD5-D98E-422E-8988-F39ABDC6D4FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +33,6 @@ Global
 		{C020DFD5-D98E-422E-8988-F39ABDC6D4FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C020DFD5-D98E-422E-8988-F39ABDC6D4FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C020DFD5-D98E-422E-8988-F39ABDC6D4FF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{94699E05-18A7-43A6-913D-2AED546265E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{94699E05-18A7-43A6-913D-2AED546265E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{94699E05-18A7-43A6-913D-2AED546265E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{94699E05-18A7-43A6-913D-2AED546265E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
