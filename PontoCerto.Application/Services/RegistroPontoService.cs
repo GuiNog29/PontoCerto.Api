@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using PontoCerto.Domain.Entities;
+using PontoCerto.Application.DTOs;
 using PontoCerto.Domain.Interfaces;
 using PontoCerto.Application.Interfaces;
-using PontoCerto.Application.DTOs;
 
 namespace PontoCerto.Application.Services
 {
@@ -36,14 +36,13 @@ namespace PontoCerto.Application.Services
             return _mapper.Map<RegistroPontoDto>(registroPonto);
         }
 
-        public async Task<RegistroPontoDto> AtualizarRegistroPonto(RegistroPontoDto registroPontoDto, int registroPontoId)
+        public async Task<RegistroPontoDto> AtualizarRegistroPonto(RegistroPontoDto registroPontoDto)
         {
-            ValidarRegistroPontoDto(registroPontoDto, registroPontoId);
+            ValidarRegistroPontoDto(registroPontoDto);
             var registroPonto = _mapper.Map<RegistroPonto>(registroPontoDto);
-            registroPonto.Id = registroPontoId;
             var registroPontoAtualizado = await _registroPontoRepository.AtualizarRegistroPonto(registroPonto);
             if (registroPontoAtualizado == null)
-                throw new PessoaServiceException($"Ocorreu um erro ao atualizar a pessoa com Id:{registroPontoId}.");
+                throw new PessoaServiceException($"Ocorreu um erro ao atualizar a pessoa com Id:{registroPontoDto.Id}.");
 
             return _mapper.Map<RegistroPontoDto>(registroPontoAtualizado);
         }
@@ -54,20 +53,15 @@ namespace PontoCerto.Application.Services
             return await _registroPontoRepository.ExcluirRegistroPonto(registroPontoId);
         }
 
-        public async Task<IEnumerable<RegistroPontoDto>> BuscarTodosRegistrosPonto()
-        {
-            return _mapper.Map<IEnumerable<RegistroPontoDto>>(await _registroPontoRepository.BuscarTodosRegistrosPonto());
-        }
-
         public async Task<IEnumerable<RegistroPontoDto>> BuscarTodosRegistrosPontoPessoa(int pessoaId)
         {
             return _mapper.Map<IEnumerable<RegistroPontoDto>>(await _registroPontoRepository.BuscarTodosRegistrosPontoPessoa(pessoaId));
         }
 
-        private async void ValidarRegistroPontoDto(RegistroPontoDto registroPontoDto, int registroPontoId = 0)
+        private async void ValidarRegistroPontoDto(RegistroPontoDto registroPontoDto)
         {
-            if (registroPontoId > 0)
-                await BuscarRegistroPontoPorId(registroPontoId);
+            if (registroPontoDto.Id > 0)
+                await BuscarRegistroPontoPorId(registroPontoDto.Id);
 
             if (registroPontoDto == null)
                 throw new ArgumentNullException(nameof(registroPontoDto));
@@ -75,9 +69,8 @@ namespace PontoCerto.Application.Services
             if(registroPontoDto.PessoaId <= 0)
                 throw new RegistroPontoServiceException("O valor da PessoaId deve ser maior que zero.");
         }
-
-        
     }
+
     public class RegistroPontoNotFoundException : Exception
     {
         public RegistroPontoNotFoundException(int avaliacaoId)

@@ -3,6 +3,7 @@ using PontoCerto.Application.DTOs;
 using PontoCerto.Application.Helpers;
 using PontoCerto.Application.Interfaces;
 using PontoCerto.Application.Services;
+using PontoCerto.Domain.Entities;
 
 namespace PontoCerto.Api.Controllers
 {
@@ -30,20 +31,21 @@ namespace PontoCerto.Api.Controllers
             }
         }
 
-        public IActionResult CadastrarPessoa()
+        public IActionResult CadastrarPessoa(int departamentoId)
         {
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CadastrarPessoa(PessoaDto pessoaDto)
+        public async Task<ActionResult> CadastrarPessoa(PessoaDto pessoaDto, int departamentoId)
         {
             if (!ModelState.IsValid)
                 return View(pessoaDto);
 
             try
             {
+                pessoaDto.DepartamentoId = departamentoId;
                 var pessoaCadastrada = await _pessoaService.CadastrarPessoa(pessoaDto);
                 return RedirectToAction(nameof(pessoaCadastrada));
             }
@@ -85,6 +87,22 @@ namespace PontoCerto.Api.Controllers
             catch (Exception ex)
             {
                 return _validadorErro.TratarErro("atualizar pessoa", ex);
+            }
+        }
+
+        public async Task<ActionResult> ExcluirPessoaId(int pessoaId)
+        {
+            try
+            {
+                var pessoa = await _pessoaService.BuscarPessoaPorId(pessoaId);
+                if (pessoa == null)
+                    return NotFound();
+
+                return View(pessoa);
+            }
+            catch (Exception ex)
+            {
+                return _validadorErro.TratarErro("buscar pessoa por Id", ex);
             }
         }
 
