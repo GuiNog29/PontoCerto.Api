@@ -102,6 +102,22 @@ namespace PontoCerto.Api.Controllers
             }
         }
 
+        public async Task<ActionResult> BuscarParaExcluirDepartamento(int departamentoId)
+        {
+            try
+            {
+                var departamento = await _departamentoService.BuscarDepartamentoPorId(departamentoId);
+                if (departamento == null)
+                    return NotFound();
+
+                return View(departamento);
+            }
+            catch (Exception ex)
+            {
+                return _validadorErro.TratarErro("buscar para excluir departamento", ex);
+            }
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ExcluirDepartamento(int departamentoId)

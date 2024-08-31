@@ -39,7 +39,16 @@ namespace PontoCerto.Infrastructure.Repositories
 
         public async Task<Departamento> AtualizarDepartamento(Departamento departamento)
         {
-            _dbContext.Departamentos.Update(departamento);
+            var local = _dbContext.Set<Departamento>()
+                          .Local
+                          .FirstOrDefault(entry => entry.Id.Equals(departamento.Id));
+
+            if (local != null)
+                _dbContext.Entry(local).State = EntityState.Detached;
+
+            _dbContext.Departamentos.Attach(departamento);
+            _dbContext.Entry(departamento).State = EntityState.Modified;
+
             await _dbContext.SaveChangesAsync();
             return departamento;
         }

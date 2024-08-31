@@ -5,14 +5,18 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Lista de Departamentos</h2>
+<div class="d-flex justify-content-between align-items-center mb-3 mt-3">
+    <h2 class="mb-0">Lista de Departamentos</h2>
+    <a href="/Departamento/CadastrarDepartamento" class="btn btn-primary">Adicionar Novo Departamento</a>
+</div>
+
 <table class="table">
     <thead>
         <tr>
             <th>Nome</th>
             <th>Valor Total Pago</th>
             <th>Valor Total Descontado</th>
-            <th>Ações</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -23,12 +27,11 @@
                 <td>@item.ValorTotalPago.ToString("C")</td>
                 <td>@item.ValorTotalDescontado.ToString("C")</td>
                 <td>
-                    <a asp-action="BuscarDepartamentoPorId" asp-route-departamentoId="@item.Id">Detalhes</a> |
-                    <a asp-action="AtualizarDepartamento" asp-route-departamentoId="@item.Id">Editar</a> |
-                    <a asp-action="ExcluirDepartamento" asp-route-departamentoId="@item.Id">Excluir</a>
+                    <a href="/Departamento/BuscarDepartamentoPorId?departamentoId=@item.Id">Detalhes</a> |
+                    <a href="/Departamento/AtualizarDepartamento?departamentoId=@item.Id">Editar</a> |
+                    <a href="/Departamento/BuscarParaExcluirDepartamento?departamentoId=@item.Id">Excluir</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
-<a href="/Departamento/CadastrarDepartamento" class="btn btn-primary">Adicionar Novo Departamento</a>

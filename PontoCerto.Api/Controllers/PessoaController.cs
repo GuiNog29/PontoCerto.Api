@@ -2,6 +2,7 @@
 using PontoCerto.Application.DTOs;
 using PontoCerto.Application.Helpers;
 using PontoCerto.Application.Interfaces;
+using PontoCerto.Application.Services;
 
 namespace PontoCerto.Api.Controllers
 {
@@ -16,7 +17,7 @@ namespace PontoCerto.Api.Controllers
             _pessoaService = pessoaService;
         }
 
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(int departamentoId)
         {
             try
             {
@@ -36,7 +37,7 @@ namespace PontoCerto.Api.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CadastrarPessoa([FromForm] PessoaDto pessoaDto)
+        public async Task<ActionResult> CadastrarPessoa(PessoaDto pessoaDto)
         {
             if (!ModelState.IsValid)
                 return View(pessoaDto);
@@ -48,7 +49,8 @@ namespace PontoCerto.Api.Controllers
             }
             catch (Exception ex)
             {
-                return _validadorErro.TratarErro("cadastrar pessoa", ex);
+                TempData["ErrorMessage"] = ex.Message;
+                return View(pessoaDto);
             }
         }
 
