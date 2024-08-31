@@ -8,9 +8,10 @@
 <h2>Detalhes do Departamento</h2>
 
 <div>
-    <h4>@Model.Nome</h4>
+    <h4>Nome Departamento: @Model.Nome</h4>
     <p>Valor Total Pago: @Model.ValorTotalPago.ToString("C")</p>
     <p>Valor Total Descontado: @Model.ValorTotalDescontado.ToString("C")</p>
 </div>
 
-<a asp-action="Index" class="btn btn-secondary">Voltar</a>
+<a href="/Departamento" class="btn btn-secondary">Voltar</a>
+<a href="@Url.Action("Index", "Pessoa")" class="btn btn-primary">Gerenciar Pessoas</a>

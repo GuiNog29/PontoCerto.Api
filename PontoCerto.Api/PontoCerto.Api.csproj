@@ -14,7 +14,7 @@
 
 	<ItemGroup>
 		<None Include="Views\Departamento\CadastrarDepartamento.cshtml" />
-		<None Include="Views\Departamento\ExcluirDepartamento.cshtml" />
+		<None Include="Views\Departamento\BuscarParaExcluirDepartamento.cshtml" />
 		<None Include="Views\Departamento\BuscarDepartamentoPorId.cshtml" />
 		<None Include="Views\Departamento\AtualizarDepartamento.cshtml" />
 		<None Include="Views\Departamento\Index.cshtml" />

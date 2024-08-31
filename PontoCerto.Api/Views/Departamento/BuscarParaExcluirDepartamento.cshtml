@@ -7,16 +7,19 @@
 
 <h2>Excluir Departamento</h2>
 
-<h3>Você realmente deseja excluir este departamento?</h3>
+<h3>Deseja realmente excluir este departamento?</h3>
 <div>
-    <h4>@Model.Nome</h4>
+    <h4>Nome Departamento: @Model.Nome</h4>
     <p>Valor Total Pago: @Model.ValorTotalPago.ToString("C")</p>
     <p>Valor Total Descontado: @Model.ValorTotalDescontado.ToString("C")</p>
 </div>
 
-<form asp-action="ExcluirDepartamento" method="post">
+<form action="/Departamento/ExcluirDepartamento?departamentoId=@Model.Id" method="post">
     @Html.AntiForgeryToken()
-    <input type="hidden" asp-for="Id" />
-    <input type="submit" value="Excluir" class="btn btn-danger" />
+    <div class="form-group">
+        <input type="submit" value="Excluir" class="btn btn-danger" />
+    </div>
 </form>
-<a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+
+
+<a href="/Departamento" class="btn btn-secondary">Cancelar</a>

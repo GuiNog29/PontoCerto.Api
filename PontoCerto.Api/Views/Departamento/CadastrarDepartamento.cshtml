@@ -7,7 +7,7 @@
 
 <h2>Cadastrar Novo Departamento</h2>
 
-<form asp-action="CadastrarDepartamento" method="post">
+<form action="/Departamento/CadastrarDepartamento" method="post">
     @Html.AntiForgeryToken()
 
     <div class="form-group">
@@ -20,4 +20,5 @@
         <input type="submit" value="Cadastrar" class="btn btn-primary" />
     </div>
 </form>
+
 <a href="/Departamento" class="btn btn-secondary">Voltar</a>
