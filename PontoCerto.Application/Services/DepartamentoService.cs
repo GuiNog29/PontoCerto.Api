@@ -90,7 +90,7 @@ namespace PontoCerto.Application.Services
                     {
                         foreach (var registro in pessoa.RegistrosPonto)
                         {
-                            var horasTrabalhadas = (registro.HoraSaida - registro.HoraEntrada) - registro.DuracaoAlmoco;
+                            var horasTrabalhadas = (registro.HoraSaida - registro.HoraEntrada) - registro.InicioAlmoco - registro.FimAlmoco;
                             if (horasTrabalhadas.TotalHours < 8)
                             {
                                 departamento.ValorTotalDescontado += (decimal)(8 - horasTrabalhadas.TotalHours) * pessoa.ValorHora;
@@ -133,7 +133,9 @@ namespace PontoCerto.Application.Services
                         var valorHora = decimal.Parse(colunas[2], CultureInfo.InvariantCulture);
                         var data = DateTime.ParseExact(colunas[3], "dd/MM/yyyy", CultureInfo.InvariantCulture);
                         var entrada = TimeSpan.Parse(colunas[4]);
-                        var saida = TimeSpan.Parse(colunas[5]);
+                        var inicioAlmoco = TimeSpan.Parse(colunas[5]);
+                        var fimAlmoco = TimeSpan.Parse(colunas[6]);
+                        var saida = TimeSpan.Parse(colunas[7]);
                         var almoco = colunas[6].Trim();
 
                         lock (colaboradores)
@@ -154,8 +156,9 @@ namespace PontoCerto.Application.Services
                             {
                                 Data = data,
                                 HoraEntrada = entrada,
+                                InicioAlmoco = inicioAlmoco,
+                                FimAlmoco= fimAlmoco,
                                 HoraSaida = saida,
-                                Almoco = almoco,
                                 Pessoa = pessoa
                             };
 
