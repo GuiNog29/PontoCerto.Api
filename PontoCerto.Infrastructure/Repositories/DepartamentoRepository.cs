@@ -26,14 +26,14 @@ namespace PontoCerto.Infrastructure.Repositories
         public async Task<Departamento?> BuscarDepartamentoPorId(int departamentoId)
         {
             return await _dbContext.Departamentos.Include(d => d.Pessoas)
-                                                 .ThenInclude(p => p.RegistrosPontos)
+                                                 .ThenInclude(p => p.RegistrosPonto)
                                                  .FirstOrDefaultAsync(d => d.Id == departamentoId);
         }
 
         public async Task<IEnumerable<Departamento>> BuscarTodosDepartamentos()
         {
             return await _dbContext.Departamentos.Include(d => d.Pessoas)
-                                                 .ThenInclude(p => p.RegistrosPontos)
+                                                 .ThenInclude(p => p.RegistrosPonto)
                                                  .ToListAsync();
         }
 

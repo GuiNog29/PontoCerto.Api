@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Cadastrar Registro Ponto";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var pessoaId = ViewBag.pessoaId;
+    var pessoaId = ViewBag.PessoaId;
 }
 
 <h2>Registrar Novo Ponto</h2>
@@ -13,32 +13,27 @@
 
     <div class="form-group">
         <label asp-for="Data" class="control-label">Data</label>
-        <input asp-for="Data" class="form-control" type="date" />
-        <span asp-validation-for="Data" class="text-danger"></span>
+        <input name="Data" asp-for="Data" class="form-control date-input" type="text" />
     </div>
 
     <div class="form-group">
         <label asp-for="HoraEntrada" class="control-label">Horário Entrada</label>
-        <input asp-for="HoraEntrada" class="form-control" type="time" />
-        <span asp-validation-for="HoraEntrada" class="text-danger"></span>
+        <input name="HoraEntrada" asp-for="HoraEntrada" class="form-control time-input" type="text" />
     </div>
 
     <div class="form-group">
-        <label asp-for="InicioAlmoco" class="control-label">Horário Inicio Almoco</label>
-        <input asp-for="InicioAlmoco" class="form-control" type="time" />
-        <span asp-validation-for="InicioAlmoco" class="text-danger"></span>
+        <label asp-for="InicioAlmoco" class="control-label">Horário Início Almoço</label>
+        <input name="InicioAlmoco" asp-for="InicioAlmoco" class="form-control time-input" type="text" />
     </div>
 
     <div class="form-group">
-        <label asp-for="FimAlmoco" class="control-label">Horário Fim Almoco</label>
-        <input asp-for="FimAlmoco" class="form-control" type="time" />
-        <span asp-validation-for="FimAlmoco" class="text-danger"></span>
+        <label asp-for="FimAlmoco" class="control-label">Horário Fim Almoço</label>
+        <input name="FimAlmoco" asp-for="FimAlmoco" class="form-control time-input" type="text" />
     </div>
 
     <div class="form-group">
         <label asp-for="HoraSaida" class="control-label">Horário Saída</label>
-        <input asp-for="HoraSaida" class="form-control" type="time" />
-        <span asp-validation-for="HoraSaida" class="text-danger"></span>
+        <input name="HoraSaida" asp-for="HoraSaida" class="form-control time-input" type="text" />
     </div>
 
     <div class="form-group">

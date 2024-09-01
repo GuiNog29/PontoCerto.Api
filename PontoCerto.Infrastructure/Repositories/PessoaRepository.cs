@@ -22,7 +22,7 @@ namespace PontoCerto.Infrastructure.Repositories
 
         public async Task<Pessoa?> BuscarPessoaPorId(int pessoaId)
         {
-            return await _dbContext.Pessoas.Include(x => x.RegistrosPontos)
+            return await _dbContext.Pessoas.Include(x => x.RegistrosPonto)
                                            .FirstOrDefaultAsync(x => x.Id == pessoaId);
         }
 
@@ -54,9 +54,9 @@ namespace PontoCerto.Infrastructure.Repositories
             return true;
         }
 
-        public async Task<IEnumerable<Pessoa>> BuscarTodasPessoas()
+        public async Task<IEnumerable<Pessoa>> BuscarTodasPessoas(int departamentoId)
         {
-            return await _dbContext.Pessoas.Include(x => x.RegistrosPontos).ToListAsync();
+            return await _dbContext.Pessoas.Where(x => x.DepartamentoId == departamentoId).Include(x => x.RegistrosPonto).ToListAsync();
         }
     }
 }

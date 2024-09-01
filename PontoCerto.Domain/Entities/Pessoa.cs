@@ -12,6 +12,6 @@ namespace PontoCerto.Domain.Entities
         public decimal ValorHora { get; set; }
         public int DepartamentoId { get; set; }
         public Departamento? Departamento{ get; set; }
-        public ICollection<RegistroPonto> RegistrosPontos { get; set; } = new List<RegistroPonto>();
+        public ICollection<RegistroPonto> RegistrosPonto { get; set; } = new List<RegistroPonto>();
     }
 }

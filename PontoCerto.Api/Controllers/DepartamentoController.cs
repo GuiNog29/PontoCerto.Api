@@ -29,14 +29,14 @@ namespace PontoCerto.Api.Controllers
             }
         }
 
-        public IActionResult CadastrarDepartamento()
+        public IActionResult Cadastrar()
         {
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CadastrarDepartamento([FromForm] DepartamentoDto departamentoDto)
+        public async Task<ActionResult> Cadastrar([FromForm] DepartamentoDto departamentoDto)
         {
             if (!ModelState.IsValid)
                 return View(departamentoDto);
@@ -44,7 +44,7 @@ namespace PontoCerto.Api.Controllers
             try
             {
                 var departamentoCadastrado = await _departamentoService.CadastrarDepartamento(departamentoDto);
-                return RedirectToAction(nameof(BuscarDepartamentoPorId), new { departamentoId = departamentoCadastrado.Id });
+                return RedirectToAction(nameof(Detalhes), new { departamentoId = departamentoCadastrado.Id });
             }
             catch (Exception ex)
             {
@@ -52,7 +52,7 @@ namespace PontoCerto.Api.Controllers
             }
         }
 
-        public async Task<ActionResult> BuscarDepartamentoPorId(int departamentoId)
+        public async Task<ActionResult> Detalhes(int departamentoId)
         {
             try
             {
@@ -60,6 +60,7 @@ namespace PontoCerto.Api.Controllers
                 if (departamento == null)
                     return NotFound();
 
+                HttpContext.Session.SetInt32("ssnDepartamentoId", departamentoId);
                 return View(departamento);
             }
             catch (Exception ex)
@@ -68,7 +69,7 @@ namespace PontoCerto.Api.Controllers
             }
         }
 
-        public async Task<ActionResult> AtualizarDepartamento(int departamentoId)
+        public async Task<ActionResult> Editar(int departamentoId)
         {
             try
             {
@@ -86,7 +87,7 @@ namespace PontoCerto.Api.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AtualizarDepartamento([FromForm] DepartamentoDto departamentoDto, int departamentoId)
+        public async Task<IActionResult> Editar([FromForm] DepartamentoDto departamentoDto, int departamentoId)
         {
             if (!ModelState.IsValid)
                 return View(departamentoDto);
@@ -103,7 +104,7 @@ namespace PontoCerto.Api.Controllers
             }
         }
 
-        public async Task<ActionResult> ExcluirDepartamentoId(int departamentoId)
+        public async Task<ActionResult> Excluir(int departamentoId)
         {
             try
             {
@@ -121,7 +122,7 @@ namespace PontoCerto.Api.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ExcluirDepartamento(int departamentoId)
+        public async Task<IActionResult> ExcluirPorId(int departamentoId)
         {
             try
             {

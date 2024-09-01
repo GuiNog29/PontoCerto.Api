@@ -27,9 +27,9 @@
                 <td>@item.Nome</td>
                 <td>@item.ValorHora.ToString("C")</td>
                 <td>
-                    <a href="@Url.Action("Detalhes", "Pessoa", new { pessoaId = @item.Id, departamentoId = @departamentoId })">Detalhes</a> |
-                    <a href="@Url.Action("Editar", "Pessoa", new { pessoaId = @item.Id, departamentoId = @departamentoId })">Editar</a> |
-                    <a href="@Url.Action("Excluir", "Pessoa", new { pessoaId = @item.Id, departamentoId = @departamentoId })">Excluir</a>
+                    <a href="@Url.Action("Detalhes", "Pessoa", new { pessoaId = @item.Id })">Detalhes</a> |
+                    <a href="@Url.Action("Editar", "Pessoa", new { pessoaId = @item.Id })">Editar</a> |
+                    <a href="@Url.Action("Excluir", "Pessoa", new { pessoaId = @item.Id })">Excluir</a>
                 </td>
             </tr>
         }

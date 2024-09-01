@@ -16,38 +16,44 @@ namespace PontoCerto.Api.Controllers
             _pessoaService = pessoaService;
         }
 
-        public async Task<ActionResult> Index(int departamentoId)
+        public async Task<ActionResult> Index()
         {
             try
             {
+                var departamentoId = PegarValorDepartamentoId();
                 ViewBag.DepartamentoId = departamentoId;
-                var listaPessoas = await _pessoaService.BuscarTodasPessoas();
+
+                var listaPessoas = await _pessoaService.BuscarTodasPessoas(departamentoId);
                 return View(listaPessoas);
             }
-            catch (Exception ex)
+            catch (Exception ex) 
             {
                 return _validadorErro.TratarErro("listar todas as pessoas", ex);
             }
         }
 
-        public IActionResult CadastrarPessoa(int departamentoId)
+        public IActionResult Cadastrar()
         {
+            var departamentoId = PegarValorDepartamentoId();
             ViewBag.DepartamentoId = departamentoId;
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CadastrarPessoa(PessoaDto pessoaDto, int departamentoId)
+        public async Task<ActionResult> Cadastrar(PessoaDto pessoaDto)
         {
             if (!ModelState.IsValid)
                 return View(pessoaDto);
 
             try
             {
+                var departamentoId = PegarValorDepartamentoId();
+                ViewBag.DepartamentoId = departamentoId;
+
                 pessoaDto.DepartamentoId = departamentoId;
                 var pessoaCadastrada = await _pessoaService.CadastrarPessoa(pessoaDto);
-                return RedirectToAction(nameof(BuscarPessoaPorId), new { departamentoId = pessoaCadastrada.Id });
+                return RedirectToAction(nameof(Detalhes), new { pessoaId = pessoaCadastrada.Id, departamentoId });
             }
             catch (Exception ex)
             {
@@ -56,10 +62,34 @@ namespace PontoCerto.Api.Controllers
             }
         }
 
-        public async Task<ActionResult> BuscarPessoaPorId(int pessoaId)
+        public async Task<ActionResult> Detalhes(int pessoaId)
         {
             try
             {
+                var departamentoId = PegarValorDepartamentoId();
+                ViewBag.DepartamentoId = departamentoId;
+
+                var pessoa = await _pessoaService.BuscarPessoaPorId(pessoaId);
+                if (pessoa == null)
+                    return NotFound();
+
+                HttpContext.Session.SetInt32("ssnPessoaId", pessoaId);
+
+                return View(pessoa);
+            }
+            catch (Exception ex)
+            {
+                return _validadorErro.TratarErro("buscar pessoa por Id", ex);
+            }
+        }
+
+        public async Task<ActionResult> Editar(int pessoaId)
+        {
+            try
+            {
+                var departamentoId = PegarValorDepartamentoId();
+                ViewBag.DepartamentoId = departamentoId;
+
                 var pessoa = await _pessoaService.BuscarPessoaPorId(pessoaId);
                 if (pessoa == null)
                     return NotFound();
@@ -74,15 +104,21 @@ namespace PontoCerto.Api.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AtualizarPessoa([FromForm] PessoaDto pessoaDto, int pessoaId)
+        public async Task<IActionResult> Editar([FromForm] PessoaDto pessoaDto, int pessoaId)
         {
             if (!ModelState.IsValid)
                 return View(pessoaDto);
 
             try
             {
+                var departamentoId = PegarValorDepartamentoId();
+                ViewBag.DepartamentoId = departamentoId;
+
+                pessoaDto.Id = pessoaId;
+                pessoaDto.DepartamentoId = departamentoId;
+                ViewBag.DepartamentoId = departamentoId;
                 await _pessoaService.AtualizarPessoa(pessoaDto, pessoaId);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Detalhes), new { pessoaId, departamentoId });
             }
             catch (Exception ex)
             {
@@ -90,10 +126,13 @@ namespace PontoCerto.Api.Controllers
             }
         }
 
-        public async Task<ActionResult> ExcluirPessoaId(int pessoaId)
+        public async Task<ActionResult> Excluir(int pessoaId)
         {
             try
             {
+                var departamentoId = PegarValorDepartamentoId();
+                ViewBag.DepartamentoId = departamentoId;
+
                 var pessoa = await _pessoaService.BuscarPessoaPorId(pessoaId);
                 if (pessoa == null)
                     return NotFound();
@@ -108,10 +147,13 @@ namespace PontoCerto.Api.Controllers
 
         [HttpDelete]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ExcluirPessoa(int pessoaId)
+        public async Task<IActionResult> ExcluirPorId(int pessoaId)
         {
             try
             {
+                var departamentoId = PegarValorDepartamentoId();
+                ViewBag.DepartamentoId = departamentoId;
+
                 await _pessoaService.ExcluirPessoa(pessoaId);
                 return RedirectToAction(nameof(Index));
             }
@@ -119,6 +161,15 @@ namespace PontoCerto.Api.Controllers
             {
                 return _validadorErro.TratarErro("excluir pessoa", ex);
             }
+        }
+
+        private int PegarValorDepartamentoId()
+        {
+            var departamentoId = HttpContext.Session.GetInt32("ssnDepartamentoId");
+            if (!departamentoId.HasValue)
+                throw new Exception("Não foi localizado o id do departamento, por favor selecione ele novamente.");
+
+            return departamentoId.Value;
         }
     }
 }

@@ -16,11 +16,13 @@ namespace PontoCerto.Api.Controllers
             _registroPontoService = registroPontoService;
         }
 
-        public async Task<ActionResult> Index(int pessoaId)
+        public async Task<ActionResult> Index()
         {
             try
             {
-                ViewBag.pessoaId = pessoaId;
+                var pessoaId = PegarValorPessoaId();
+                ViewBag.PessoaId = pessoaId;
+
                 var listaRegistrosPontoPessoa = await _registroPontoService.BuscarTodosRegistrosPontoPessoa(pessoaId);
                 return View(listaRegistrosPontoPessoa);
             }
@@ -30,23 +32,29 @@ namespace PontoCerto.Api.Controllers
             }
         }
 
-        public IActionResult CadastrarRegistroPonto(int pessoaId)
+        public IActionResult Cadastrar()
         {
+            var pessoaId = PegarValorPessoaId();
+            ViewBag.PessoaId = pessoaId;
+
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CadastrarRegistroPonto([FromForm] RegistroPontoDto registroPontoDto, int pessoaId)
+        public async Task<ActionResult> Cadastrar([FromForm] RegistroPontoDto registroPontoDto)
         {
             if (!ModelState.IsValid)
                 return View(registroPontoDto);
 
             try
             {
+                var pessoaId = PegarValorPessoaId();
+                ViewBag.PessoaId = pessoaId;
+
                 registroPontoDto.PessoaId = pessoaId;
                 var registroPontoCadastrado = await _registroPontoService.CadastrarRegistroPonto(registroPontoDto);
-                return RedirectToAction(nameof(BuscarRegistroPontoPorId), new { departamentoId = registroPontoCadastrado.Id });
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
@@ -54,10 +62,32 @@ namespace PontoCerto.Api.Controllers
             }
         }
 
-        public async Task<ActionResult> BuscarRegistroPontoPorId(int registroPontoId)
+        public async Task<ActionResult> Detalhes(int registroPontoId)
         {
             try
             {
+                var pessoaId = PegarValorPessoaId();
+                ViewBag.PessoaId = pessoaId;
+
+                var registroPonto = await _registroPontoService.BuscarRegistroPontoPorId(registroPontoId);
+                if (registroPonto == null)
+                    return NotFound();
+
+                return View(registroPonto);
+            }
+            catch (Exception ex)
+            {
+                return _validadorErro.TratarErro("buscar registro ponto por Id", ex);
+            }
+        }
+
+        public async Task<IActionResult> Editar(int registroPontoId)
+        {
+            try
+            {
+                var pessoaId = PegarValorPessoaId();
+                ViewBag.PessoaId = pessoaId;
+
                 var registroPonto = await _registroPontoService.BuscarRegistroPontoPorId(registroPontoId);
                 if (registroPonto == null)
                     return NotFound();
@@ -72,14 +102,18 @@ namespace PontoCerto.Api.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AtualizarRegistroPonto(RegistroPontoDto registroPontoDto, int registroPontoId)
+        public async Task<IActionResult> Editar(RegistroPontoDto registroPontoDto, int registroPontoId)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || registroPontoId <= 0)
                 return View(registroPontoDto);
 
             try
             {
+                var pessoaId = PegarValorPessoaId();
+                ViewBag.PessoaId = pessoaId;
+
                 registroPontoDto.Id = registroPontoId;
+                registroPontoDto.PessoaId = pessoaId;
                 await _registroPontoService.AtualizarRegistroPonto(registroPontoDto);
                 return RedirectToAction(nameof(Index));
             }
@@ -89,10 +123,13 @@ namespace PontoCerto.Api.Controllers
             }
         }
 
-        public async Task<IActionResult> ExcluirRegistroPontoId(int registroPontoId)
+        public async Task<IActionResult> Excluir(int registroPontoId)
         {
             try
             {
+                var pessoaId = PegarValorPessoaId();
+                ViewBag.PessoaId = pessoaId;
+
                 var registroPonto = await _registroPontoService.BuscarRegistroPontoPorId(registroPontoId);
                 if (registroPonto == null)
                     return NotFound();
@@ -105,12 +142,15 @@ namespace PontoCerto.Api.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ExcluirRegistroPonto(int registroPontoId)
+        public async Task<IActionResult> ExcluirPorId(int registroPontoId)
         {
             try
             {
+                var pessoaId = PegarValorPessoaId();
+                ViewBag.PessoaId = pessoaId;
+
                 await _registroPontoService.ExcluirRegistroPonto(registroPontoId);
                 return RedirectToAction(nameof(Index));
             }
@@ -118,6 +158,15 @@ namespace PontoCerto.Api.Controllers
             {
                 return _validadorErro.TratarErro("excluir registro ponto", ex);
             }
+        }
+
+        private int PegarValorPessoaId()
+        {
+            var pessoaId = HttpContext.Session.GetInt32("ssnPessoaId");
+            if (!pessoaId.HasValue)
+                throw new Exception("Não foi localizado o id do colaborador, por favor selecione ele novamente.");
+
+            return pessoaId.Value;
         }
     }
 }

@@ -67,15 +67,17 @@ namespace PontoCerto.Application.Services
 
                 var departamentos = pessoas
                     .SelectMany(p => p.RegistrosPonto, (p, r) => new { Pessoa = p, Registro = r })
-                    .GroupBy(x => new { x.Registro.Data.Year, x.Registro.Data.Month })
+                    .GroupBy(x => new
+                    {
+                        Data = DateTime.ParseExact(x.Registro.Data, "dd/MM/yyyy", null) 
+                    })
                     .Select(g => new DepartamentoDto
                     {
-                        Nome = $"Departamento-{g.Key.Month}-{g.Key.Year}",
+                        Nome = $"Departamento-{g.Key.Data.Month}-{g.Key.Data.Year}", 
                         Pessoas = g
                             .GroupBy(x => x.Pessoa.Id)
                             .Select(pg =>
                             {
-                                var pessoaDto = pg.Key;
                                 var pessoa = pg.First().Pessoa;
                                 pessoa.RegistrosPonto = pg.Select(x => x.Registro).ToList();
                                 return pessoa;
@@ -90,7 +92,10 @@ namespace PontoCerto.Application.Services
                     {
                         foreach (var registro in pessoa.RegistrosPonto)
                         {
-                            var horasTrabalhadas = (registro.HoraSaida - registro.HoraEntrada) - registro.InicioAlmoco - registro.FimAlmoco;
+                            var horasTrabalhadas = (registro.ConverterHoraSaidaParaTimeSpan() - registro.ConverterHoraEntradaParaTimeSpan())
+                                                    - registro.ConverterInicioAlmocoParaTimeSpan()
+                                                    - registro.ConverterFimAlmocoParaTimeSpan();
+
                             if (horasTrabalhadas.TotalHours < 8)
                             {
                                 departamento.ValorTotalDescontado += (decimal)(8 - horasTrabalhadas.TotalHours) * pessoa.ValorHora;
@@ -132,11 +137,10 @@ namespace PontoCerto.Application.Services
                         var nome = colunas[1];
                         var valorHora = decimal.Parse(colunas[2], CultureInfo.InvariantCulture);
                         var data = DateTime.ParseExact(colunas[3], "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                        var entrada = TimeSpan.Parse(colunas[4]);
-                        var inicioAlmoco = TimeSpan.Parse(colunas[5]);
-                        var fimAlmoco = TimeSpan.Parse(colunas[6]);
-                        var saida = TimeSpan.Parse(colunas[7]);
-                        var almoco = colunas[6].Trim();
+                        var entrada = colunas[4];
+                        var inicioAlmoco = colunas[5];
+                        var fimAlmoco = colunas[6];
+                        var saida = colunas[7];
 
                         lock (colaboradores)
                         {
@@ -154,10 +158,10 @@ namespace PontoCerto.Application.Services
 
                             var registroPonto = new RegistroPontoDto
                             {
-                                Data = data,
+                                Data = data.ToString("dd/MM/yyyy"),
                                 HoraEntrada = entrada,
                                 InicioAlmoco = inicioAlmoco,
-                                FimAlmoco= fimAlmoco,
+                                FimAlmoco = fimAlmoco,
                                 HoraSaida = saida,
                                 Pessoa = pessoa
                             };
@@ -170,13 +174,14 @@ namespace PontoCerto.Application.Services
                         Console.WriteLine($"Erro ao processar linha: {linha}. Exceção: {ex.Message}");
                         throw;
                     }
-                };
+                }
             });
 
             await Task.WhenAll(tarefas);
 
             return colaboradores.Values.ToList();
         }
+
 
         private async void ValidarDepartamentoDto(DepartamentoDto departamentoDto)
         {

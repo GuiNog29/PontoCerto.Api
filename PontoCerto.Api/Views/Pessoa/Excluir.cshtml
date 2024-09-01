@@ -17,7 +17,9 @@
 
 <form action="/Pessoa/ExcluirPorId?pessoaId=@Model.Id&&departamentoId = @departamentoId" method="post">
     @Html.AntiForgeryToken()
-    <input type="submit" value="Excluir" class="btn btn-danger" />
+    <div class="form-group">
+        <input type="submit" value="Excluir" class="btn btn-danger" />
+    </div>
 </form>
 
 <a href="@Url.Action("Index", "Pessoa", new { departamentoId = @departamentoId })" class="btn btn-secondary">Cancelar</a>

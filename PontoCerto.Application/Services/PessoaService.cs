@@ -54,9 +54,9 @@ namespace PontoCerto.Application.Services
             return await _pessoaRepository.ExcluirPessoa(pessoaId);
         }
 
-        public async Task<IEnumerable<PessoaDto>> BuscarTodasPessoas()
+        public async Task<IEnumerable<PessoaDto>> BuscarTodasPessoas(int departamentoId)
         {
-            return _mapper.Map<IEnumerable<PessoaDto>>(await _pessoaRepository.BuscarTodasPessoas());
+            return _mapper.Map<IEnumerable<PessoaDto>>(await _pessoaRepository.BuscarTodasPessoas(departamentoId));
         }
 
         private async void ValidarPessoaDto(PessoaDto pessoaDto, int pessoaId = 0)
