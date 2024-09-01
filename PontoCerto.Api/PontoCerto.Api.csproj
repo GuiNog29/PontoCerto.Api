@@ -24,10 +24,9 @@
 		<None Include="Views\Pessoa\BuscarPessoaPorId.cshtml" />
 		<None Include="Views\Pessoa\AtualizarPessoa.cshtml" />
 		<None Include="Views\Pessoa\Index.cshtml" />
-		<None Include="Views\RegistroPonto\Create.cshtml" />
-		<None Include="Views\RegistroPonto\Delete.cshtml" />
-		<None Include="Views\RegistroPonto\Details.cshtml" />
-		<None Include="Views\RegistroPonto\Edit.cshtml" />
+		<None Include="Views\RegistroPonto\CadastrarRegistroPonto.cshtml" />
+		<None Include="Views\RegistroPonto\ExcluirRegistroPontoId.cshtml" />
+		<None Include="Views\RegistroPonto\AtualizarRegistroPonto.cshtml" />
 		<None Include="Views\RegistroPonto\Index.cshtml" />
 		<None Include="Views\Shared\_Layout.cshtml" />
 	</ItemGroup>

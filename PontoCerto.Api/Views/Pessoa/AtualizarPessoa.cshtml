@@ -13,12 +13,12 @@
 
     <div class="form-group">
         <label asp-for="Nome" class="control-label"></label>
-        <input name="Nome" asp-for="Nome" class="form-control" />
+        <input name="Nome" asp-for="Nome" class="form-control" value="@Model.Nome" />
     </div>
 
     <div class="form-group">
         <label asp-for="ValorHora" class="control-label"></label>
-        <input name="ValorHora" asp-for="ValorHora" class="form-control" type="number" step="0.01" />
+        <input name="ValorHora" asp-for="ValorHora" class="form-control" type="number" step="0.01" value="@Model.ValorHora" />
     </div>
 
     <div class="form-group">

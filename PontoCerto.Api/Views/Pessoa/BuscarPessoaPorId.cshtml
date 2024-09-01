@@ -36,4 +36,4 @@
 </div>
 
 <a href="/Pessoa/Index?departamentoId=@departamentoId" class="btn btn-secondary">Voltar</a>
-<a href="@Url.Action("Index", "RegistroPonto")" class="btn btn-primary">Gerenciar Pontos</a>
+<a href="@Url.Action("Index", "RegistroPonto", new { pessoaId = @Model.Id }))" class="btn btn-primary">Gerenciar Pontos</a>

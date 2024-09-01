@@ -20,6 +20,7 @@ namespace PontoCerto.Api.Controllers
         {
             try
             {
+                ViewBag.pessoaId = pessoaId;
                 var listaRegistrosPontoPessoa = await _registroPontoService.BuscarTodosRegistrosPontoPessoa(pessoaId);
                 return View(listaRegistrosPontoPessoa);
             }
@@ -45,7 +46,7 @@ namespace PontoCerto.Api.Controllers
             {
                 registroPontoDto.PessoaId = pessoaId;
                 var registroPontoCadastrado = await _registroPontoService.CadastrarRegistroPonto(registroPontoDto);
-                return RedirectToAction(nameof(registroPontoCadastrado));
+                return RedirectToAction(nameof(BuscarRegistroPontoPorId), new { departamentoId = registroPontoCadastrado.Id });
             }
             catch (Exception ex)
             {
@@ -85,6 +86,22 @@ namespace PontoCerto.Api.Controllers
             catch (Exception ex)
             {
                 return _validadorErro.TratarErro("atualizar registro ponto", ex);
+            }
+        }
+
+        public async Task<IActionResult> ExcluirRegistroPontoId(int registroPontoId)
+        {
+            try
+            {
+                var registroPonto = await _registroPontoService.BuscarRegistroPontoPorId(registroPontoId);
+                if (registroPonto == null)
+                    return NotFound();
+
+                return View(registroPonto);
+            }
+            catch (Exception ex)
+            {
+                return _validadorErro.TratarErro("buscar registro ponto por Id", ex);
             }
         }
 

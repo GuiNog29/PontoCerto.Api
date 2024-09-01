@@ -2,8 +2,6 @@
 using PontoCerto.Application.DTOs;
 using PontoCerto.Application.Helpers;
 using PontoCerto.Application.Interfaces;
-using PontoCerto.Application.Services;
-using PontoCerto.Domain.Entities;
 
 namespace PontoCerto.Api.Controllers
 {
@@ -22,6 +20,7 @@ namespace PontoCerto.Api.Controllers
         {
             try
             {
+                ViewBag.DepartamentoId = departamentoId;
                 var listaPessoas = await _pessoaService.BuscarTodasPessoas();
                 return View(listaPessoas);
             }
@@ -33,6 +32,7 @@ namespace PontoCerto.Api.Controllers
 
         public IActionResult CadastrarPessoa(int departamentoId)
         {
+            ViewBag.DepartamentoId = departamentoId;
             return View();
         }
 
@@ -47,7 +47,7 @@ namespace PontoCerto.Api.Controllers
             {
                 pessoaDto.DepartamentoId = departamentoId;
                 var pessoaCadastrada = await _pessoaService.CadastrarPessoa(pessoaDto);
-                return RedirectToAction(nameof(pessoaCadastrada));
+                return RedirectToAction(nameof(BuscarPessoaPorId), new { departamentoId = pessoaCadastrada.Id });
             }
             catch (Exception ex)
             {

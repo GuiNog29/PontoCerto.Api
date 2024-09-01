@@ -1,5 +1,10 @@
 @model PontoCerto.Application.DTOs.RegistroPontoDto
 
+@{
+    ViewBag.Title = "Cadastrar Registro Ponto";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
 <h2>Excluir Registro de Ponto</h2>
 
 <h3>Você realmente deseja excluir este registro de ponto?</h3>
@@ -12,9 +17,8 @@
     <p>Almoço: @Model.Almoco</p>
 </div>
 
-<form asp-action="Delete" method="post">
+<form action="/RegistroPonto/ExcluirRegistroPontoId?registroPontoId=@Model.Id" method="post">
     @Html.AntiForgeryToken()
-    <input type="hidden" asp-for="Id" />
     <input type="submit" value="Excluir" class="btn btn-danger" />
 </form>
 
