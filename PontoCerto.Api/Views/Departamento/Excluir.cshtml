@@ -14,7 +14,7 @@
     <p>Valor Total Descontado: @Model.ValorTotalDescontado.ToString("C")</p>
 </div>
 
-<form action="/Departamento/ExcluirDepartamento?departamentoId=@Model.Id" method="post">
+<form action="/Departamento/ExcluirPorId?departamentoId=@Model.Id" method="post">
     @Html.AntiForgeryToken()
     <div class="form-group">
         <input type="submit" value="Excluir" class="btn btn-danger" />
@@ -22,4 +22,4 @@
 </form>
 
 
-<a href="/Departamento" class="btn btn-secondary">Cancelar</a>
+<a href="@Url.Action("Index", "Departamento")" class="btn btn-secondary">Cancelar</a>

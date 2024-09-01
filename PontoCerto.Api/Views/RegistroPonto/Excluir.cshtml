@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Cadastrar Registro Ponto";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var pessoaId = ViewBag.pessoaId;
 }
 
 <h2>Excluir Registro de Ponto</h2>
@@ -17,9 +18,9 @@
     <p>Almoço: @Model.Almoco</p>
 </div>
 
-<form action="/RegistroPonto/ExcluirRegistroPontoId?registroPontoId=@Model.Id" method="post">
+<form action="/RegistroPonto/ExcluirPorId?registroPontoId=@Model.Id&&pessoaId=@pessoaId" method="post">
     @Html.AntiForgeryToken()
     <input type="submit" value="Excluir" class="btn btn-danger" />
 </form>
 
-<a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+<a href="@Url.Action("Index", "Pessoa", new { pessoaId = @pessoaId })" class="btn btn-secondary">Cancelar</a>

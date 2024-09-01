@@ -8,17 +8,17 @@
 
 <h2>Cadastrar Nova Pessoa</h2>
 
-<form action="/Pessoa/CadastrarPessoa?departamentoId=@departamentoId" method="post">
+<form action="/Pessoa/Cadastrar?departamentoId=@departamentoId" method="post">
     @Html.AntiForgeryToken()
 
     <div class="form-group">
-        <label asp-for="Nome" class="control-label"></label>
+        <label asp-for="Nome" class="control-label">Nome</label>
         <input name="Nome" asp-for="Nome" class="form-control" placeholder="Insira seu nome" />
         <span asp-validation-for="Nome" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="ValorHora" class="control-label"></label>
+        <label asp-for="ValorHora" class="control-label">Valor Hora</label>
         <input name="ValorHora" asp-for="ValorHora" class="form-control" type="number" step="0.01" placeholder="Insira o valor da hora" />
         <span asp-validation-for="ValorHora" class="text-danger"></span>
     </div>
@@ -28,4 +28,4 @@
     </div>
 </form>
 
-<a href="/Departamento/BuscarDepartamentoPorId?departamentoId=@departamentoId" class="btn btn-secondary">Voltar</a>
+<a href="@Url.Action("Detalhes", "Pessoa", new { departamentoId = @departamentoId })" class="btn btn-secondary">Voltar</a>

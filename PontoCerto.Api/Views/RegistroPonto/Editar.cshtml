@@ -3,11 +3,12 @@
 @{
     ViewBag.Title = "Cadastrar Registro Ponto";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var pessoaId = ViewBag.pessoaId;
 }
 
 <h2>Editar Registro de Ponto</h2>
 
-<form action="/RegistroPonto/AtualizarRegistroPonto?registroId=@Model.Id" method="post">
+<form action="/RegistroPonto/Editar?registroId=@Model.Id&&pessoaId=@pessoaId" method="post">
     @Html.AntiForgeryToken()
     <input type="hidden" asp-for="Id" name="pessoaId" value="@Model.PessoaId" />
 
@@ -22,13 +23,18 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="HoraSaida" class="control-label"></label>
-        <input name="HoraSaida" asp-for="HoraSaida" class="form-control" type="time" value="@Model.HoraSaida" />
+        <label asp-for="InicioAlmoco" class="control-label"></label>
+        <input name="InicioAlmoco" asp-for="InicioAlmoco" class="form-control" type="time" value="@Model.InicioAlmoco" />
     </div>
 
     <div class="form-group">
-        <label asp-for="Almoco" class="control-label"></label>
-        <input name="Almoco" asp-for="Almoco" class="form-control" type="time" value="@Model.Almoco" />
+        <label asp-for="FimAlmoco" class="control-label"></label>
+        <input name="FimAlmoco" asp-for="FimAlmoco" class="form-control" type="time" value="@Model.FimAlmoco" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="HoraSaida" class="control-label"></label>
+        <input name="HoraSaida" asp-for="HoraSaida" class="form-control" type="time" value="@Model.HoraSaida" />
     </div>
 
     <div class="form-group">
@@ -36,4 +42,4 @@
     </div>
 </form>
 
-<a asp-action="Index" class="btn btn-secondary">Voltar</a>
+<a href="@Url.Action("Index", "Pessoa", new { pessoaId = @pessoaId })" class="btn btn-secondary">Voltar</a>

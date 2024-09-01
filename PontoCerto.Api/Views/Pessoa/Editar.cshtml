@@ -8,16 +8,16 @@
 
 <h2>Editar Pessoa</h2>
 
-<form action="/Pessoa/AtualizarPessoa?pessoaId=@Model.Id" method="post">
+<form action="/Pessoa/Editar?pessoaId=@Model.Id&&departamentoId=@departamentoId" method="post">
     @Html.AntiForgeryToken()
 
     <div class="form-group">
-        <label asp-for="Nome" class="control-label"></label>
+        <label asp-for="Nome" class="control-label">Nome</label>
         <input name="Nome" asp-for="Nome" class="form-control" value="@Model.Nome" />
     </div>
 
     <div class="form-group">
-        <label asp-for="ValorHora" class="control-label"></label>
+        <label asp-for="ValorHora" class="control-label">Valor Hora</label>
         <input name="ValorHora" asp-for="ValorHora" class="form-control" type="number" step="0.01" value="@Model.ValorHora" />
     </div>
 
@@ -26,4 +26,4 @@
     </div>
 </form>
 
-<a href="/Pessoa/Index?departamentoId=@departamentoId" class="btn btn-secondary">Voltar</a>
+<a @Url.Action("Index", "Pessoa", new { departamentoId = @departamentoId })" class="btn btn-secondary">Voltar</a>
