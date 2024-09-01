@@ -14,4 +14,4 @@
 </div>
 
 <a href="/Departamento" class="btn btn-secondary">Voltar</a>
-<a href="@Url.Action("Index", "Pessoa")" class="btn btn-primary">Gerenciar Pessoas</a>
+<a href="@Url.Action("Index", "Pessoa", new { departamentoId = @Model.Id })" class="btn btn-primary">Gerenciar Pessoas</a>

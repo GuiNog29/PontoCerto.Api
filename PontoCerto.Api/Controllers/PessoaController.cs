@@ -2,7 +2,6 @@
 using PontoCerto.Application.DTOs;
 using PontoCerto.Application.Helpers;
 using PontoCerto.Application.Interfaces;
-using PontoCerto.Application.Services;
 
 namespace PontoCerto.Api.Controllers
 {
@@ -21,6 +20,7 @@ namespace PontoCerto.Api.Controllers
         {
             try
             {
+                ViewBag.DepartamentoId = departamentoId;
                 var listaPessoas = await _pessoaService.BuscarTodasPessoas();
                 return View(listaPessoas);
             }
@@ -30,22 +30,24 @@ namespace PontoCerto.Api.Controllers
             }
         }
 
-        public IActionResult CadastrarPessoa()
+        public IActionResult CadastrarPessoa(int departamentoId)
         {
+            ViewBag.DepartamentoId = departamentoId;
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CadastrarPessoa(PessoaDto pessoaDto)
+        public async Task<ActionResult> CadastrarPessoa(PessoaDto pessoaDto, int departamentoId)
         {
             if (!ModelState.IsValid)
                 return View(pessoaDto);
 
             try
             {
+                pessoaDto.DepartamentoId = departamentoId;
                 var pessoaCadastrada = await _pessoaService.CadastrarPessoa(pessoaDto);
-                return RedirectToAction(nameof(pessoaCadastrada));
+                return RedirectToAction(nameof(BuscarPessoaPorId), new { departamentoId = pessoaCadastrada.Id });
             }
             catch (Exception ex)
             {
@@ -85,6 +87,22 @@ namespace PontoCerto.Api.Controllers
             catch (Exception ex)
             {
                 return _validadorErro.TratarErro("atualizar pessoa", ex);
+            }
+        }
+
+        public async Task<ActionResult> ExcluirPessoaId(int pessoaId)
+        {
+            try
+            {
+                var pessoa = await _pessoaService.BuscarPessoaPorId(pessoaId);
+                if (pessoa == null)
+                    return NotFound();
+
+                return View(pessoa);
+            }
+            catch (Exception ex)
+            {
+                return _validadorErro.TratarErro("buscar pessoa por Id", ex);
             }
         }
 

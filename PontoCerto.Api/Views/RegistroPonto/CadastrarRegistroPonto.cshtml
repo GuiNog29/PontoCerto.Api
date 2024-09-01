@@ -1,9 +1,15 @@
 @model PontoCerto.Application.DTOs.RegistroPontoDto
 
+@{
+    ViewBag.Title = "Cadastrar Registro Ponto";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var pessoaId = ViewBag.pessoaId;
+}
+
 <h2>Registrar Novo Ponto</h2>
 
-<form asp-action="Create" method="post">
-    @Html.AntiForgeryToken() <!-- Proteção contra CSRF -->
+<form action="/RegistroPonto/CadastrarRegistroPonto?pessoaId=@pessoaId" method="post">
+    @Html.AntiForgeryToken()
 
     <div class="form-group">
         <label asp-for="Data" class="control-label"></label>
@@ -27,12 +33,6 @@
         <label asp-for="Almoço" class="control-label"></label>
         <input asp-for="Almoço" class="form-control" type="time" />
         <span asp-validation-for="Almoço" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="FuncionarioId" class="control-label">Funcionário</label>
-        <select asp-for="FuncionarioId" class="form-control" asp-items="ViewBag.Funcionarios"></select>
-        <span asp-validation-for="FuncionarioId" class="text-danger"></span>
     </div>
 
     <div class="form-group">

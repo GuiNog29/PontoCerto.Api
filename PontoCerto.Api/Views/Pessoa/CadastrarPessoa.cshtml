@@ -3,11 +3,12 @@
 @{
     ViewBag.Title = "Cadastrar pessoa";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var departamentoId = ViewBag.DepartamentoId;
 }
 
 <h2>Cadastrar Nova Pessoa</h2>
 
-<form asp-action="CadastrarPessoa" method="post">
+<form action="/Pessoa/CadastrarPessoa?departamentoId=@departamentoId" method="post">
     @Html.AntiForgeryToken()
 
     <div class="form-group">
@@ -27,4 +28,4 @@
     </div>
 </form>
 
-<a asp-action="Index" class="btn btn-secondary">Voltar</a>
+<a href="/Departamento/BuscarDepartamentoPorId?departamentoId=@departamentoId" class="btn btn-secondary">Voltar</a>

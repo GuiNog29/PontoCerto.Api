@@ -37,14 +37,13 @@ namespace PontoCerto.Application.Services
             return _mapper.Map<DepartamentoDto>(departamento);
         }
 
-        public async Task<DepartamentoDto> AtualizarDepartamento(DepartamentoDto departamentoDto, int departamentoId)
+        public async Task<DepartamentoDto> AtualizarDepartamento(DepartamentoDto departamentoDto)
         {
-            ValidarDepartamentoDto(departamentoDto, departamentoId);
+            ValidarDepartamentoDto(departamentoDto);
             var departamento = _mapper.Map<Departamento>(departamentoDto);
-            departamento.Id = departamentoId;
             var departamentoAtualizado = await _departamentoRepository.AtualizarDepartamento(departamento);
             if (departamentoAtualizado == null)
-                throw new DepartamentoServiceException($"Ocorreu um erro ao atualizar o departamento com Id:{departamentoId}.");
+                throw new DepartamentoServiceException($"Ocorreu um erro ao atualizar o departamento com Id:{departamentoDto.Id}.");
 
             return _mapper.Map<DepartamentoDto>(departamentoAtualizado);
         }
@@ -176,10 +175,10 @@ namespace PontoCerto.Application.Services
             return colaboradores.Values.ToList();
         }
 
-        private async void ValidarDepartamentoDto(DepartamentoDto departamentoDto, int departamentoId = 0)
+        private async void ValidarDepartamentoDto(DepartamentoDto departamentoDto)
         {
-            if (departamentoId > 0)
-                await BuscarDepartamentoPorId(departamentoId);
+            if (departamentoDto.Id > 0)
+                await BuscarDepartamentoPorId(departamentoDto.Id);
 
             if (departamentoDto == null)
                 throw new ArgumentNullException(nameof(departamentoDto));

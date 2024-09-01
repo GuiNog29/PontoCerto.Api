@@ -45,11 +45,6 @@ namespace PontoCerto.Infrastructure.Repositories
             return true;
         }
 
-        public async Task<IEnumerable<RegistroPonto>> BuscarTodosRegistrosPonto()
-        {
-            return await _dbContext.RegistrosPontos.Include(x => x.Pessoa).ToListAsync();
-        }
-
         public async Task<IEnumerable<RegistroPonto>> BuscarTodosRegistrosPontoPessoa(int pessoaId)
         {
             return await _dbContext.RegistrosPontos.Where(x => x.PessoaId == pessoaId).Include(x => x.Pessoa).ToListAsync();

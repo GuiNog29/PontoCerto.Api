@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Excluir Pessoa";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var departamentoId = ViewBag.DepartamentoId;
 }
 
 <h2>Excluir Pessoa</h2>
@@ -14,10 +15,9 @@
     <p>Valor Hora: @Model.ValorHora.ToString("C")</p>
 </div>
 
-<form asp-action="Delete" method="post">
+<form action="/Pessoa/ExcluirPessoa?pessoaId=@Model.Id" method="post">
     @Html.AntiForgeryToken()
-    <input type="hidden" asp-for="Id" />
     <input type="submit" value="Excluir" class="btn btn-danger" />
 </form>
 
-<a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+<a href="/Pessoa/Index?departamentoId=@departamentoId" class="btn btn-secondary">Cancelar</a>

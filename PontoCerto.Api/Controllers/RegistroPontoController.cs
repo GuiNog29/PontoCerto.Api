@@ -16,23 +16,11 @@ namespace PontoCerto.Api.Controllers
             _registroPontoService = registroPontoService;
         }
 
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(int pessoaId)
         {
             try
             {
-                var listaRegistrosPonto = await _registroPontoService.BuscarTodosRegistrosPonto();
-                return View(listaRegistrosPonto);
-            }
-            catch (Exception ex)
-            {
-                return _validadorErro.TratarErro("listar todas os registros de ponto", ex);
-            }
-        }
-
-        public async Task<ActionResult> BuscarTodosRegistrosPontoPessoa(int pessoaId)
-        {
-            try
-            {
+                ViewBag.pessoaId = pessoaId;
                 var listaRegistrosPontoPessoa = await _registroPontoService.BuscarTodosRegistrosPontoPessoa(pessoaId);
                 return View(listaRegistrosPontoPessoa);
             }
@@ -42,22 +30,23 @@ namespace PontoCerto.Api.Controllers
             }
         }
 
-        public IActionResult CadastrarRegistroPonto()
+        public IActionResult CadastrarRegistroPonto(int pessoaId)
         {
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CadastrarRegistroPonto([FromForm] RegistroPontoDto registroPontoDto)
+        public async Task<ActionResult> CadastrarRegistroPonto([FromForm] RegistroPontoDto registroPontoDto, int pessoaId)
         {
             if (!ModelState.IsValid)
                 return View(registroPontoDto);
 
             try
             {
+                registroPontoDto.PessoaId = pessoaId;
                 var registroPontoCadastrado = await _registroPontoService.CadastrarRegistroPonto(registroPontoDto);
-                return RedirectToAction(nameof(registroPontoCadastrado));
+                return RedirectToAction(nameof(BuscarRegistroPontoPorId), new { departamentoId = registroPontoCadastrado.Id });
             }
             catch (Exception ex)
             {
@@ -90,12 +79,29 @@ namespace PontoCerto.Api.Controllers
 
             try
             {
-                await _registroPontoService.AtualizarRegistroPonto(registroPontoDto, registroPontoId);
+                registroPontoDto.Id = registroPontoId;
+                await _registroPontoService.AtualizarRegistroPonto(registroPontoDto);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
                 return _validadorErro.TratarErro("atualizar registro ponto", ex);
+            }
+        }
+
+        public async Task<IActionResult> ExcluirRegistroPontoId(int registroPontoId)
+        {
+            try
+            {
+                var registroPonto = await _registroPontoService.BuscarRegistroPontoPorId(registroPontoId);
+                if (registroPonto == null)
+                    return NotFound();
+
+                return View(registroPonto);
+            }
+            catch (Exception ex)
+            {
+                return _validadorErro.TratarErro("buscar registro ponto por Id", ex);
             }
         }
 

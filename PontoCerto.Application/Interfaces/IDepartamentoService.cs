@@ -6,7 +6,7 @@ namespace PontoCerto.Application.Interfaces
     {
         Task<DepartamentoDto> CadastrarDepartamento(DepartamentoDto departamento);
         Task<DepartamentoDto?> BuscarDepartamentoPorId(int departamentoId);
-        Task<DepartamentoDto> AtualizarDepartamento(DepartamentoDto departamento, int departamentoId);
+        Task<DepartamentoDto> AtualizarDepartamento(DepartamentoDto departamento);
         Task<bool> ExcluirDepartamento(int departamentoId);
         Task<IEnumerable<DepartamentoDto>> BuscarTodosDepartamentos();
         Task<DepartamentoResultadoDto> GerarResultadoDepartamento(IEnumerable<PessoaDto> pessoas);

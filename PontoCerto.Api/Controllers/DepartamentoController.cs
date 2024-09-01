@@ -93,7 +93,8 @@ namespace PontoCerto.Api.Controllers
 
             try
             {
-                await _departamentoService.AtualizarDepartamento(departamentoDto, departamentoId);
+                departamentoDto.Id = departamentoId;
+                await _departamentoService.AtualizarDepartamento(departamentoDto);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
@@ -102,7 +103,7 @@ namespace PontoCerto.Api.Controllers
             }
         }
 
-        public async Task<ActionResult> BuscarParaExcluirDepartamento(int departamentoId)
+        public async Task<ActionResult> ExcluirDepartamentoId(int departamentoId)
         {
             try
             {
