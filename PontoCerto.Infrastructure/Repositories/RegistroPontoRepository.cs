@@ -28,7 +28,16 @@ namespace PontoCerto.Infrastructure.Repositories
 
         public async Task<RegistroPonto> AtualizarRegistroPonto(RegistroPonto registroPonto)
         {
-            _dbContext.RegistrosPontos.Update(registroPonto);
+            var local = _dbContext.Set<RegistroPonto>()
+                          .Local
+                          .FirstOrDefault(entry => entry.Id.Equals(registroPonto.Id));
+
+            if (local != null)
+                _dbContext.Entry(local).State = EntityState.Detached;
+
+            _dbContext.RegistrosPontos.Attach(registroPonto);
+            _dbContext.Entry(registroPonto).State = EntityState.Modified;
+
             await _dbContext.SaveChangesAsync();
             return registroPonto;
         }
