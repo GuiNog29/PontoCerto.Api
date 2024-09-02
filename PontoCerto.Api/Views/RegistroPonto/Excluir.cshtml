@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Cadastrar Registro Ponto";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var pessoaId = ViewBag.PessoaId;
 }
 
 <h2>Excluir Registro de Ponto</h2>
@@ -10,16 +11,18 @@
 <h3>Você realmente deseja excluir este registro de ponto?</h3>
 
 <div>
-    <h4>@Model.Pessoa.Nome</h4>
-    <p>Data: @Model.Data.ToShortDateString()</p>
+    <h4>@Model.Pessoa?.Nome</h4>
+    <p>Data: @Model.Data</p>
     <p>Entrada: @Model.HoraEntrada</p>
     <p>Saída: @Model.HoraSaida</p>
     <p>Almoço: @Model.Almoco</p>
 </div>
 
-<form action="/RegistroPonto/ExcluirRegistroPontoId?registroPontoId=@Model.Id" method="post">
+<form action="/RegistroPonto/ExcluirPorId?registroPontoId=@Model.Id" method="post">
     @Html.AntiForgeryToken()
-    <input type="submit" value="Excluir" class="btn btn-danger" />
+    <div class="form-group">
+        <input type="submit" value="Excluir" class="btn btn-danger" />
+    </div>
 </form>
 
-<a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+<a href="@Url.Action("Index", "RegistroPonto", new { pessoaId = @pessoaId })" class="btn btn-secondary">Cancelar</a>

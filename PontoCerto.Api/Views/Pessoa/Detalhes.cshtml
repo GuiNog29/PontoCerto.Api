@@ -6,7 +6,11 @@
     var departamentoId = ViewBag.DepartamentoId;
 }
 
-<h2>Detalhes da Pessoa</h2>
+<div class="d-flex justify-content-between align-items-center mb-3 mt-3">
+    <h2 class ="mb-0">Detalhes da Pessoa</h2>
+    <a href="@Url.Action("Index", "RegistroPonto", new { pessoaId = @Model.Id })" class="btn btn-primary">Gerenciar Pontos</a>
+</div>
+
 
 <div>
     <h4>@Model.Nome</h4>
@@ -25,7 +29,7 @@
             @foreach (var registro in Model.RegistrosPonto)
             {
                 <tr>
-                    <td>@registro.Data.ToShortDateString()</td>
+                    <td>@registro.Data</td>
                     <td>@registro.HoraEntrada</td>
                     <td>@registro.HoraSaida</td>
                     <td>@registro.Almoco</td>
@@ -35,5 +39,4 @@
     </table>
 </div>
 
-<a href="/Pessoa/Index?departamentoId=@departamentoId" class="btn btn-secondary">Voltar</a>
-<a href="@Url.Action("Index", "RegistroPonto", new { pessoaId = @Model.Id }))" class="btn btn-primary">Gerenciar Pontos</a>
+<a href="@Url.Action("Index", "Pessoa", new { departamentoId = @departamentoId })" class="btn btn-secondary">Voltar</a>

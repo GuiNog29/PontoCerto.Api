@@ -5,7 +5,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Detalhes do Departamento</h2>
+<div class="d-flex justify-content-between align-items-center mb-3 mt-3">
+    <h2 class="mb-0">Detalhes do Departamento</h2>
+    <a href="@Url.Action("Index", "Pessoa", new { departamentoId = @Model.Id })" class="btn btn-primary">Gerenciar Pessoas</a>
+</div>
 
 <div>
     <h4>Nome Departamento: @Model.Nome</h4>
@@ -13,5 +16,4 @@
     <p>Valor Total Descontado: @Model.ValorTotalDescontado.ToString("C")</p>
 </div>
 
-<a href="/Departamento" class="btn btn-secondary">Voltar</a>
-<a href="@Url.Action("Index", "Pessoa", new { departamentoId = @Model.Id })" class="btn btn-primary">Gerenciar Pessoas</a>
+<a href="@Url.Action("Index", "Departamento")" class="btn btn-secondary">Voltar</a>

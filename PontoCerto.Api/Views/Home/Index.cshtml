@@ -15,6 +15,14 @@
 
 <div class="row mt-4">
     <div class="col-md-12">
-        <a href="@Url.Action("LerArquivos", "Departamento")" class="btn btn-secondary btn-lg btn-block">Importar Registros de Ponto (CSV)</a>
+        <form action="@Url.Action("Importar", "Departamento")" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <label class="control-label">Caminho arquivos .csv</label>
+                <input type="text" id="caminhoPasta" name="caminhoPasta" class="form-control" placeholder="Insira o caminho de onde está os arquivos" />
+            </div>
+            <button type="submit" class="btn btn-secondary btn-lg btn-block">Importar Registros de Ponto (CSV)</button>
+        </form>
     </div>
 </div>

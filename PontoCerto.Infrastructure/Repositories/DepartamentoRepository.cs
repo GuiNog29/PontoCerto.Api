@@ -1,9 +1,7 @@
 ﻿using PontoCerto.Domain.Entities;
 using PontoCerto.Domain.Interfaces;
-using PontoCerto.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using PontoCerto.Infrastructure.Data;
 
 namespace PontoCerto.Infrastructure.Repositories
 {
@@ -26,14 +24,14 @@ namespace PontoCerto.Infrastructure.Repositories
         public async Task<Departamento?> BuscarDepartamentoPorId(int departamentoId)
         {
             return await _dbContext.Departamentos.Include(d => d.Pessoas)
-                                                 .ThenInclude(p => p.RegistrosPontos)
+                                                    .ThenInclude(p => p.RegistrosPonto)
                                                  .FirstOrDefaultAsync(d => d.Id == departamentoId);
         }
 
         public async Task<IEnumerable<Departamento>> BuscarTodosDepartamentos()
         {
             return await _dbContext.Departamentos.Include(d => d.Pessoas)
-                                                 .ThenInclude(p => p.RegistrosPontos)
+                                                    .ThenInclude(p => p.RegistrosPonto)
                                                  .ToListAsync();
         }
 

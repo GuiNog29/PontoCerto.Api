@@ -16,12 +16,12 @@ namespace PontoCerto.Infrastructure.Data
 
             modelBuilder.Entity<RegistroPonto>()
                 .HasOne(x => x.Pessoa)
-                .WithMany(x => x.RegistrosPontos)
+                .WithMany(x => x.RegistrosPonto)
                 .HasForeignKey(x => x.PessoaId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Pessoa>()
-                .HasMany(x => x.RegistrosPontos)
+                .HasMany(x => x.RegistrosPonto)
                 .WithOne(x => x.Pessoa)
                 .HasForeignKey(x => x.PessoaId)
                 .OnDelete(DeleteBehavior.Restrict);

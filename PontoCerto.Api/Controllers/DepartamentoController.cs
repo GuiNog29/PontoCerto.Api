@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
 using PontoCerto.Application.DTOs;
 using PontoCerto.Application.Helpers;
+using System.Text.Json.Serialization;
 using PontoCerto.Application.Interfaces;
 
 namespace PontoCerto.Api.Controllers
@@ -29,14 +31,14 @@ namespace PontoCerto.Api.Controllers
             }
         }
 
-        public IActionResult CadastrarDepartamento()
+        public IActionResult Cadastrar()
         {
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CadastrarDepartamento([FromForm] DepartamentoDto departamentoDto)
+        public async Task<ActionResult> Cadastrar([FromForm] DepartamentoDto departamentoDto)
         {
             if (!ModelState.IsValid)
                 return View(departamentoDto);
@@ -44,7 +46,7 @@ namespace PontoCerto.Api.Controllers
             try
             {
                 var departamentoCadastrado = await _departamentoService.CadastrarDepartamento(departamentoDto);
-                return RedirectToAction(nameof(BuscarDepartamentoPorId), new { departamentoId = departamentoCadastrado.Id });
+                return RedirectToAction(nameof(Detalhes), new { departamentoId = departamentoCadastrado.Id });
             }
             catch (Exception ex)
             {
@@ -52,7 +54,7 @@ namespace PontoCerto.Api.Controllers
             }
         }
 
-        public async Task<ActionResult> BuscarDepartamentoPorId(int departamentoId)
+        public async Task<ActionResult> Detalhes(int departamentoId)
         {
             try
             {
@@ -60,6 +62,7 @@ namespace PontoCerto.Api.Controllers
                 if (departamento == null)
                     return NotFound();
 
+                HttpContext.Session.SetInt32("ssnDepartamentoId", departamentoId);
                 return View(departamento);
             }
             catch (Exception ex)
@@ -68,7 +71,7 @@ namespace PontoCerto.Api.Controllers
             }
         }
 
-        public async Task<ActionResult> AtualizarDepartamento(int departamentoId)
+        public async Task<ActionResult> Editar(int departamentoId)
         {
             try
             {
@@ -86,7 +89,7 @@ namespace PontoCerto.Api.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AtualizarDepartamento([FromForm] DepartamentoDto departamentoDto, int departamentoId)
+        public async Task<IActionResult> Editar([FromForm] DepartamentoDto departamentoDto, int departamentoId)
         {
             if (!ModelState.IsValid)
                 return View(departamentoDto);
@@ -103,7 +106,7 @@ namespace PontoCerto.Api.Controllers
             }
         }
 
-        public async Task<ActionResult> ExcluirDepartamentoId(int departamentoId)
+        public async Task<ActionResult> Excluir(int departamentoId)
         {
             try
             {
@@ -121,7 +124,7 @@ namespace PontoCerto.Api.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ExcluirDepartamento(int departamentoId)
+        public async Task<IActionResult> ExcluirPorId(int departamentoId)
         {
             try
             {
@@ -134,25 +137,22 @@ namespace PontoCerto.Api.Controllers
             }
         }
 
-        public async Task<ActionResult> GerarResultadoDepartamento(IEnumerable<PessoaDto> pessoas)
+        public async Task<ActionResult> Importar(string caminhoPasta)
         {
             try
             {
-                var resultado = await _departamentoService.GerarResultadoDepartamento(pessoas);
-                return View(resultado);
-            }
-            catch (Exception ex)
-            {
-                return _validadorErro.TratarErro("gerar resultado do departamento", ex);
-            }
-        }
+                var listaPessoas = await _departamentoService.LerArquivos(caminhoPasta);
+                var resultadoDepartamento = await _departamentoService.GerarResultadoDepartamento(listaPessoas);
 
-        public async Task<ActionResult> LerArquivos(string caminhoPasta)
-        {
-            try
-            {
-                var pessoas = await _departamentoService.LerArquivos(caminhoPasta);
-                return View("PessoasImportadas", pessoas);
+                // Configurar a serialização para lidar com ciclos de referência
+                var options = new JsonSerializerOptions
+                {
+                    ReferenceHandler = ReferenceHandler.Preserve,
+                    WriteIndented = true
+                };
+
+                // Retornar o resultado em formato JSON
+                return new JsonResult(resultadoDepartamento, options);
             }
             catch (Exception ex)
             {

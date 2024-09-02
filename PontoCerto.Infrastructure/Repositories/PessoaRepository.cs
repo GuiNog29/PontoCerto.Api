@@ -22,13 +22,22 @@ namespace PontoCerto.Infrastructure.Repositories
 
         public async Task<Pessoa?> BuscarPessoaPorId(int pessoaId)
         {
-            return await _dbContext.Pessoas.Include(x => x.RegistrosPontos)
+            return await _dbContext.Pessoas.Include(x => x.RegistrosPonto)
                                            .FirstOrDefaultAsync(x => x.Id == pessoaId);
         }
 
         public async Task<Pessoa> AtualizarPessoa(Pessoa pessoa)
         {
-            _dbContext.Pessoas.Update(pessoa);
+            var local = _dbContext.Set<Pessoa>()
+                          .Local
+                          .FirstOrDefault(entry => entry.Id.Equals(pessoa.Id));
+
+            if (local != null)
+                _dbContext.Entry(local).State = EntityState.Detached;
+
+            _dbContext.Pessoas.Attach(pessoa);
+            _dbContext.Entry(pessoa).State = EntityState.Modified;
+
             await _dbContext.SaveChangesAsync();
             return pessoa;
         }
@@ -45,9 +54,10 @@ namespace PontoCerto.Infrastructure.Repositories
             return true;
         }
 
-        public async Task<IEnumerable<Pessoa>> BuscarTodasPessoas()
+        public async Task<IEnumerable<Pessoa>> BuscarTodasPessoas(int departamentoId)
         {
-            return await _dbContext.Pessoas.Include(x => x.RegistrosPontos).ToListAsync();
+            return await _dbContext.Pessoas.Where(x => x.DepartamentoId == departamentoId)
+                .Include(x => x.RegistrosPonto).Include(x => x.Departamento).ToListAsync();
         }
     }
 }

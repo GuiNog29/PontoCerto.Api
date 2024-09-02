@@ -55,8 +55,9 @@ namespace PontoCerto.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Data = table.Column<DateTime>(type: "datetime2", nullable: false),
                     HoraEntrada = table.Column<TimeSpan>(type: "time", nullable: false),
+                    InicioAlmoco = table.Column<TimeSpan>(type: "time", nullable: false),
+                    FimAlmoco = table.Column<TimeSpan>(type: "time", nullable: false),
                     HoraSaida = table.Column<TimeSpan>(type: "time", nullable: false),
-                    Almoco = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PessoaId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

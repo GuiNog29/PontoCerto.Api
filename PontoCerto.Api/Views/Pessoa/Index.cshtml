@@ -8,7 +8,7 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
     <h2>Lista de Pessoas</h2>
-    <a href="/Pessoa/CadastrarPessoa?departamentoId=@departamentoId" class="btn btn-primary">Adicionar Nova Pessoa</a>
+    <a href="@Url.Action("Cadastrar", "Pessoa", new { departamentoId = @departamentoId })" class="btn btn-primary">Adicionar Nova Pessoa</a>
 </div>
 
 
@@ -27,12 +27,14 @@
                 <td>@item.Nome</td>
                 <td>@item.ValorHora.ToString("C")</td>
                 <td>
-                    <a href="/Pessoa/BuscarPessoaPorId?pessoaId=@item.Id">Detalhes</a>
-                    <a href="/Pessoa/AtualizarPessoa?pessoaId=@item.Id">Editar</a>
-                    <a href="/Pessoa/ExcluirPessoaId?pessoaId=@item.Id">Excluir</a>
+                    <a href="@Url.Action("Detalhes", "Pessoa", new { pessoaId = @item.Id })">Detalhes</a> |
+                    <a href="@Url.Action("Editar", "Pessoa", new { pessoaId = @item.Id })">Editar</a> |
+                    <a href="@Url.Action("Excluir", "Pessoa", new { pessoaId = @item.Id })">Excluir</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+<a href="@Url.Action("Detalhes", "Departamento", new { departamentoId = @departamentoId })" class="btn btn-secondary">Voltar</a>
 

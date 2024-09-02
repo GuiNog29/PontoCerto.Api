@@ -8,6 +8,6 @@ namespace PontoCerto.Application.Interfaces
         Task<PessoaDto?> BuscarPessoaPorId(int pessoaId);
         Task<PessoaDto> AtualizarPessoa(PessoaDto pessoaDto, int pessoaId);
         Task<bool> ExcluirPessoa(int pessoaId);
-        Task<IEnumerable<PessoaDto>> BuscarTodasPessoas();
+        Task<IEnumerable<PessoaDto>> BuscarTodasPessoas(int departamentoId);
     }
 }

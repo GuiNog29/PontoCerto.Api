@@ -1,0 +1,44 @@
+@model PontoCerto.Application.DTOs.RegistroPontoDto
+
+@{
+    ViewBag.Title = "Cadastrar Registro Ponto";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var pessoaId = ViewBag.PessoaId;
+}
+
+<h2>Editar Registro de Ponto</h2>
+
+<form action="/RegistroPonto/Editar?registroPontoId=@Model.Id" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label asp-for="Data" class="control-label">Data</label>
+        <input name="Data" asp-for="Data" class="form-control date-input" type="text" value="@Model.Data" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="HoraEntrada" class="control-label">Horário Entrada</label>
+        <input name="HoraEntrada" asp-for="HoraEntrada" class="form-control time-input" type="text" value="@Model.HoraEntrada" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="InicioAlmoco" class="control-label">Horário Início Almoço</label>
+        <input name="InicioAlmoco" asp-for="InicioAlmoco" class="form-control time-input" type="text" value="@Model.InicioAlmoco"  />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="FimAlmoco" class="control-label">Horário Fim Almoço</label>
+        <input name="FimAlmoco" asp-for="FimAlmoco" class="form-control time-input" type="text" value="@Model.FimAlmoco" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="HoraSaida" class="control-label">Horário Saída</label>
+        <input name="HoraSaida" asp-for="HoraSaida" class="form-control time-input" type="text" value="@Model.HoraSaida" />
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Salvar" class="btn btn-primary" />
+    </div>
+</form>
+
+<a href="@Url.Action("Index", "RegistroPonto", new { pessoaId = @pessoaId })" class="btn btn-secondary">Voltar</a>

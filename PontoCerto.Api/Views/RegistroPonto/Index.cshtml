@@ -3,12 +3,12 @@
 @{
     ViewBag.Title = "Cadastrar Registro Ponto";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var pessoaId = ViewBag.pessoaId;
+    var pessoaId = ViewBag.PessoaId;
 }
 
 <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
     <h2>Lista de Registros de Ponto</h2>
-    <a href="/RegistroPonto/CadastrarRegistroPonto?pessoaId=@pessoaId" asp-action="Create" class="btn btn-primary">Adicionar Novo Registro</a>
+    <a href="@Url.Action("Cadastrar", "RegistroPonto", new { @pessoaId })" class="btn btn-primary">Adicionar Novo Registro</a>
 </div>
 
 <table class="table">
@@ -18,24 +18,24 @@
             <th>Entrada</th>
             <th>Saída</th>
             <th>Almoço</th>
-            <th>Funcionário</th>
-            <th></th>
+            <th>Ações</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
-                <td>@item.Data.ToShortDateString()</td>
-                <td>@item.HoraEntrada</td>
-                <td>@item.HoraSaida</td>
+                <td>@DateTime.Parse(item.Data).ToString("dd/MM/yyyy")</td>
+                <td>@TimeSpan.Parse(item.HoraEntrada).ToString(@"hh\:mm")</td>
+                <td>@TimeSpan.Parse(item.HoraSaida).ToString(@"hh\:mm")</td>
                 <td>@item.Almoco</td>
-                <td>@item.Pessoa.Nome</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Excluir</a>
+                    <a href="@Url.Action("Editar", "RegistroPonto", new { registroPontoId = @item.Id })">Editar</a> |
+                    <a href="@Url.Action("Excluir", "RegistroPonto", new { registroPontoId = @item.Id })">Excluir</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+<a href="@Url.Action("Detalhes", "Pessoa", new { pessoaId = @pessoaId })" class="btn btn-secondary">Voltar</a>

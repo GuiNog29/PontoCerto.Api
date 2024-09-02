@@ -13,20 +13,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="Views\Departamento\CadastrarDepartamento.cshtml" />
-		<None Include="Views\Departamento\ExcluirDepartamento.cshtml" />
-		<None Include="Views\Departamento\BuscarDepartamentoPorId.cshtml" />
-		<None Include="Views\Departamento\AtualizarDepartamento.cshtml" />
+		<None Include="Views\Departamento\Cadastrar.cshtml" />
+		<None Include="Views\Departamento\Excluir.cshtml" />
+		<None Include="Views\Departamento\Editar.cshtml" />
 		<None Include="Views\Departamento\Index.cshtml" />
 		<None Include="Views\Home\Error.cshtml" />
-		<None Include="Views\Pessoa\CadastrarPessoa.cshtml" />
-		<None Include="Views\Pessoa\ExcluirPessoa.cshtml" />
-		<None Include="Views\Pessoa\BuscarPessoaPorId.cshtml" />
-		<None Include="Views\Pessoa\AtualizarPessoa.cshtml" />
+		<None Include="Views\Pessoa\Cadastrar.cshtml" />
+		<None Include="Views\Pessoa\Excluir.cshtml" />
+		<None Include="Views\Pessoa\Editar.cshtml" />
 		<None Include="Views\Pessoa\Index.cshtml" />
-		<None Include="Views\RegistroPonto\CadastrarRegistroPonto.cshtml" />
-		<None Include="Views\RegistroPonto\ExcluirRegistroPontoId.cshtml" />
-		<None Include="Views\RegistroPonto\AtualizarRegistroPonto.cshtml" />
+		<None Include="Views\RegistroPonto\Cadastrar.cshtml" />
+		<None Include="Views\RegistroPonto\Excluir.cshtml" />
+		<None Include="Views\RegistroPonto\Editar.cshtml" />
 		<None Include="Views\RegistroPonto\Index.cshtml" />
 		<None Include="Views\Shared\_Layout.cshtml" />
 	</ItemGroup>

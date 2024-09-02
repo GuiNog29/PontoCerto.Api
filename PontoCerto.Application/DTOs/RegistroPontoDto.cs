@@ -1,27 +1,29 @@
-﻿using Swashbuckle.AspNetCore.Annotations;
+﻿using System.Text.Json.Serialization;
 
 namespace PontoCerto.Application.DTOs
 {
     public class RegistroPontoDto
     {
-        [SwaggerSchema(ReadOnly = true)]
+        [JsonIgnore]
         public int Id { get; set; }
-        public DateTime Data { get; set; }
-        public TimeSpan HoraEntrada { get; set; }
-        public TimeSpan HoraSaida { get; set; }
-        public required string Almoco { get; set; }
+        public required string Data { get; set; }
+        public required string HoraEntrada { get; set; }
+        public string? InicioAlmoco { get; set; }
+        public string? FimAlmoco { get; set; }
+        public required string HoraSaida { get; set; }
         public int PessoaId { get; set; }
-        public required PessoaDto Pessoa { get; set; }
+        public PessoaDto? Pessoa { get; set; }
 
-        public TimeSpan DuracaoAlmoco
+        public string Almoco
         {
             get
             {
-                var horasAlmoco = Almoco.Split('-');
-                var horaSaidaAlmoco = TimeSpan.Parse(horasAlmoco[0].Trim());
-                var horaRetornoAlmoco = TimeSpan.Parse(horasAlmoco[1].Trim());
-                return horaRetornoAlmoco - horaSaidaAlmoco;
+                if (string.IsNullOrEmpty(InicioAlmoco) || string.IsNullOrEmpty(FimAlmoco))
+                    return "Sem informação de almoço";
+
+                return $"{TimeSpan.Parse(InicioAlmoco):hh\\:mm} – {TimeSpan.Parse(FimAlmoco):hh\\:mm}";
             }
+            set { }
         }
     }
 }
