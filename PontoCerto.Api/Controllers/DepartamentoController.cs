@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
 using PontoCerto.Application.DTOs;
 using PontoCerto.Application.Helpers;
+using System.Text.Json.Serialization;
 using PontoCerto.Application.Interfaces;
 
 namespace PontoCerto.Api.Controllers
@@ -135,25 +137,22 @@ namespace PontoCerto.Api.Controllers
             }
         }
 
-        public async Task<ActionResult> GerarResultadoDepartamento(IEnumerable<PessoaDto> pessoas)
+        public async Task<ActionResult> Importar(string caminhoPasta)
         {
             try
             {
-                var resultado = await _departamentoService.GerarResultadoDepartamento(pessoas);
-                return View(resultado);
-            }
-            catch (Exception ex)
-            {
-                return _validadorErro.TratarErro("gerar resultado do departamento", ex);
-            }
-        }
+                var listaPessoas = await _departamentoService.LerArquivos(caminhoPasta);
+                var resultadoDepartamento = await _departamentoService.GerarResultadoDepartamento(listaPessoas);
 
-        public async Task<ActionResult> LerArquivos(string caminhoPasta)
-        {
-            try
-            {
-                var pessoas = await _departamentoService.LerArquivos(caminhoPasta);
-                return View("PessoasImportadas", pessoas);
+                // Configurar a serialização para lidar com ciclos de referência
+                var options = new JsonSerializerOptions
+                {
+                    ReferenceHandler = ReferenceHandler.Preserve,
+                    WriteIndented = true
+                };
+
+                // Retornar o resultado em formato JSON
+                return new JsonResult(resultadoDepartamento, options);
             }
             catch (Exception ex)
             {

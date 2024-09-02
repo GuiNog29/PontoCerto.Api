@@ -3,7 +3,9 @@ using System.Globalization;
 using PontoCerto.Domain.Entities;
 using PontoCerto.Application.DTOs;
 using PontoCerto.Domain.Interfaces;
+using PontoCerto.Application.Helpers;
 using PontoCerto.Application.Interfaces;
+using Microsoft.Win32;
 
 namespace PontoCerto.Application.Services
 {
@@ -11,11 +13,14 @@ namespace PontoCerto.Application.Services
     {
         private readonly IMapper _mapper;
         private readonly IDepartamentoRepository _departamentoRepository;
+        private readonly IPessoaRepository _pessoaRepository;
 
-        public DepartamentoService(IMapper mapper, IDepartamentoRepository departamentoRepository)
+        public DepartamentoService(IMapper mapper, IDepartamentoRepository departamentoRepository,
+                                   IPessoaRepository pessoaRepository)
         {
             _mapper = mapper;
             _departamentoRepository = departamentoRepository;
+            _pessoaRepository = pessoaRepository;
         }
 
         public async Task<DepartamentoDto> CadastrarDepartamento(DepartamentoDto departamentoDto)
@@ -59,129 +64,209 @@ namespace PontoCerto.Application.Services
             return _mapper.Map<IEnumerable<DepartamentoDto>>(await _departamentoRepository.BuscarTodosDepartamentos());
         }
 
-        public async Task<DepartamentoResultadoDto> GerarResultadoDepartamento(IEnumerable<PessoaDto> pessoas)
+        public async Task<IEnumerable<PessoaDto>> BuscarTodasPessoas(int departamentoId)
+        {
+            return _mapper.Map<IEnumerable<PessoaDto>>(await _pessoaRepository.BuscarTodasPessoas(departamentoId));
+        }
+
+        public async Task<ListaDepartamentoResultadoDto> GerarResultadoDepartamento(List<LerArquivosDto> lerAquivos)
         {
             return await Task.Run(() =>
             {
-                var departamentoResultado = new DepartamentoResultadoDto();
+                var listaDepartamentoResultado = new ListaDepartamentoResultadoDto();
 
-                var departamentos = pessoas
-                    .SelectMany(p => p.RegistrosPonto, (p, r) => new { Pessoa = p, Registro = r })
-                    .GroupBy(x => new
-                    {
-                        Data = DateTime.ParseExact(x.Registro.Data, "dd/MM/yyyy", null) 
-                    })
-                    .Select(g => new DepartamentoDto
-                    {
-                        Nome = $"Departamento-{g.Key.Data.Month}-{g.Key.Data.Year}", 
-                        Pessoas = g
-                            .GroupBy(x => x.Pessoa.Id)
-                            .Select(pg =>
-                            {
-                                var pessoa = pg.First().Pessoa;
-                                pessoa.RegistrosPonto = pg.Select(x => x.Registro).ToList();
-                                return pessoa;
-                            })
-                            .ToList()
-                    })
-                    .ToList();
-
-                foreach (var departamento in departamentos)
+                foreach (var arquivo in lerAquivos)
                 {
-                    foreach (var pessoa in departamento.Pessoas)
+                    var departamentoResultado = new DepartamentoResultadoDto
                     {
-                        foreach (var registro in pessoa.RegistrosPonto)
+                        Departamento = arquivo.Departamento,
+                        MesVigencia = arquivo.MesVigencia,
+                        AnoVigencia = arquivo.AnoVigencia,
+                        Funcionarios = new List<PessoaResultadoDto>()
+                    };
+
+                    foreach (var pessoa in arquivo.Pessoas)
+                    {
+                        double totalHorasTrabalhadas = 0;
+                        int diasTrabalhados = 0;
+                        int diasFalta = 0;
+                        int diasExtras = 0;
+                        double horasDebito = 0;
+                        double horasExtras = 0;
+                        var totalDiasUteisDoMes = ContarDiasUteis(arquivo.MesVigencia, arquivo.AnoVigencia);
+
+                        foreach (var registroPonto in pessoa.RegistrosPonto)
                         {
-                            var horasTrabalhadas = (registro.ConverterHoraSaidaParaTimeSpan() - registro.ConverterHoraEntradaParaTimeSpan())
-                                                    - registro.ConverterInicioAlmocoParaTimeSpan()
-                                                    - registro.ConverterFimAlmocoParaTimeSpan();
-
-                            if (horasTrabalhadas.TotalHours < 8)
+                            var horasDiarias = CalcularHoraDiaria(registroPonto);
+                            if (horasDiarias > 0)
                             {
-                                departamento.ValorTotalDescontado += (decimal)(8 - horasTrabalhadas.TotalHours) * pessoa.ValorHora;
-                            }
-                            else if (horasTrabalhadas.TotalHours > 8)
-                            {
-                                departamento.ValorTotalPago += (decimal)(horasTrabalhadas.TotalHours - 8) * pessoa.ValorHora;
-                            }
+                                diasTrabalhados++;
 
-                            departamento.ValorTotalPago += 8 * pessoa.ValorHora;
+                                if (horasDiarias < 8)
+                                    horasDebito += 8 - horasDiarias;
+                                else if (horasDiarias > 8)
+                                    horasExtras += horasDiarias - 8;
+                            }
+                            else
+                                diasFalta++;
+
+                            totalHorasTrabalhadas += horasDiarias;
                         }
+
+                        if (diasTrabalhados > totalDiasUteisDoMes)
+                            diasExtras += diasTrabalhados - totalDiasUteisDoMes;
+
+                        totalHorasTrabalhadas += horasExtras + horasDebito;
+                        var totalReceber = Math.Round(totalHorasTrabalhadas * (double)pessoa.ValorHora, 2);
+
+                        var pessoaResultado = new PessoaResultadoDto
+                        {
+                            Nome = pessoa.Nome,
+                            Codigo = pessoa.Id,
+                            ValorHora = Math.Round((double)pessoa.ValorHora, 2),
+                            TotalReceber = totalReceber,
+                            HorasExtras = Math.Round(horasExtras, 2),
+                            HorasDebito = Math.Round(horasDebito, 2),
+                            DiasFalta = diasFalta,
+                            DiasExtras = diasExtras,
+                            DiasTrabalhados = diasTrabalhados
+                        };
+
+                        departamentoResultado.Funcionarios.Add(pessoaResultado);
                     }
 
-                    departamentoResultado.Departamentos.Add(departamento);
+                    departamentoResultado.TotalPagar = Math.Round(departamentoResultado.Funcionarios.Sum(f => f.TotalReceber), 2);
+                    departamentoResultado.TotalDescontos = Math.Round(departamentoResultado.Funcionarios.Sum(f => f.HorasDebito * (double)(arquivo.Pessoas.FirstOrDefault(p => p.Id == f.Codigo)?.ValorHora ?? 0m)), 2);
+                    departamentoResultado.TotalExtras = Math.Round(departamentoResultado.Funcionarios.Sum(f => f.HorasExtras * (double)(arquivo.Pessoas.FirstOrDefault(p => p.Id == f.Codigo)?.ValorHora ?? 0m)), 2);
+
+                    listaDepartamentoResultado.Departamentos.Add(departamentoResultado);
                 }
 
-                return departamentoResultado;
+                return listaDepartamentoResultado;
             });
         }
 
-        public async Task<List<PessoaDto>> LerArquivos(string caminhoPasta)
+        private int ContarDiasUteis(string mes, string ano)
+        {
+            int diasUteis = 0;
+            int numeroMes = DateTime.ParseExact(mes, "MMMM", new CultureInfo("pt-BR")).Month;
+            int anoCorreto = int.Parse(ano);
+            int diasNoMes = DateTime.DaysInMonth(anoCorreto, numeroMes);
+
+            for (int dia = 1; dia <= diasNoMes; dia++)
+            {
+                DateTime dataAtual = new DateTime(anoCorreto, numeroMes, dia);
+
+                // Verifica se é sábado ou domingo
+                if (dataAtual.DayOfWeek == DayOfWeek.Saturday || dataAtual.DayOfWeek == DayOfWeek.Sunday)
+                    continue;
+
+                // Conta como dia útil
+                diasUteis++;
+            }
+
+            return diasUteis;
+        }
+
+        private double CalcularHoraDiaria(RegistroPontoDto registroPontoDto)
+        {
+            var minutos =
+                (ConverterHoras.ConverterHoraSaidaParaTimeSpan(registroPontoDto.HoraSaida).TotalMinutes -
+                 ConverterHoras.ConverterHoraEntradaParaTimeSpan(registroPontoDto.HoraEntrada).TotalMinutes) -
+                (ConverterHoras.ConverterFimAlmocoParaTimeSpan(registroPontoDto.FimAlmoco).TotalMinutes -
+                 ConverterHoras.ConverterInicioAlmocoParaTimeSpan(registroPontoDto.InicioAlmoco).TotalMinutes);
+
+            return minutos / 60; // Converte minutos para horas
+        }
+
+        public async Task<List<LerArquivosDto>> LerArquivos(string caminhoPasta)
         {
             var arquivos = Directory.GetFiles(caminhoPasta, "*.csv");
-            var colaboradores = new Dictionary<int, PessoaDto>();
+            var listaLerArquivosDto = new List<LerArquivosDto>();
 
             var tarefas = arquivos.Select(async arquivo =>
             {
+                var nomeArquivo = Path.GetFileNameWithoutExtension(arquivo);
+                var partesNome = nomeArquivo.Split('-');
+
+                if (partesNome.Length < 3)
+                    throw new DepartamentoServiceException($"Nome de arquivo mal formatado: {nomeArquivo}");
+
+                var departamentoNome = partesNome[0];
+                var mesVigencia = partesNome[1];
+                var anoVigencia = partesNome[2];
+
+                var lerArquivoDto = new LerArquivosDto
+                {
+                    Departamento = departamentoNome ?? "Nome no formato incorreto",
+                    MesVigencia = mesVigencia ?? "Nome do arquivo no formato incorreto",
+                    AnoVigencia = anoVigencia?? "Nome do arquivo no formato incorreto",
+                    Pessoas = new List<PessoaDto>()
+                };
+
                 var linhas = await File.ReadAllLinesAsync(arquivo);
-                foreach (var linha in linhas.Skip(1))
+
+                foreach (var linha in linhas.Skip(1)) // Pule a primeira linha que contém o cabeçalho
                 {
                     if (string.IsNullOrWhiteSpace(linha))
                         continue;
 
                     var colunas = linha.Split(';');
 
-                    try
-                    {
-                        var pessoaId = int.Parse(colunas[0]);
-                        var nome = colunas[1];
-                        var valorHora = decimal.Parse(colunas[2], CultureInfo.InvariantCulture);
-                        var data = DateTime.ParseExact(colunas[3], "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                        var entrada = colunas[4];
-                        var inicioAlmoco = colunas[5];
-                        var fimAlmoco = colunas[6];
-                        var saida = colunas[7];
+                    if (colunas.Length < 7)
+                        throw new DepartamentoServiceException($"Linha mal formatada ou incompleta: {linha}");
 
-                        lock (colaboradores)
+                    var pessoaId = int.Parse(colunas[0]);
+                    var nome = colunas[1];
+                    var valorHora = decimal.Parse(colunas[2].Replace("R$", "").Trim(), CultureInfo.InvariantCulture);
+                    var data = DateTime.ParseExact(colunas[3], "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    var entrada = colunas[4];
+                    var saida = colunas[5];
+                    var almoco = colunas[6];
+
+                    var InicioFimAlmoco = almoco.Split('-');
+                    var inicioAlmoco = InicioFimAlmoco[0].Trim().Replace(" ", "");
+                    var fimAlmoco = InicioFimAlmoco[1].Trim().Replace(" ", "");
+
+                    // Verifica se a pessoa já existe na lista de pessoas do departamento
+                    var pessoa = lerArquivoDto.Pessoas.FirstOrDefault(p => p.Id == pessoaId);
+
+                    if (pessoa == null)
+                    {
+                        // Se a pessoa não existir, cria uma nova
+                        pessoa = new PessoaDto
                         {
-                            if (!colaboradores.TryGetValue(pessoaId, out var pessoa))
-                            {
-                                pessoa = new PessoaDto
-                                {
-                                    Id = pessoaId,
-                                    Nome = nome,
-                                    ValorHora = valorHora,
-                                    RegistrosPonto = new List<RegistroPontoDto>()
-                                };
-                                colaboradores[pessoaId] = pessoa;
-                            }
-
-                            var registroPonto = new RegistroPontoDto
-                            {
-                                Data = data.ToString("dd/MM/yyyy"),
-                                HoraEntrada = entrada,
-                                InicioAlmoco = inicioAlmoco,
-                                FimAlmoco = fimAlmoco,
-                                HoraSaida = saida,
-                                Pessoa = pessoa
-                            };
-
-                            pessoa.RegistrosPonto.Add(registroPonto);
-                        }
+                            Id = pessoaId,
+                            Nome = nome,
+                            ValorHora = valorHora,
+                            RegistrosPonto = new List<RegistroPontoDto>()
+                        };
+                        lerArquivoDto.Pessoas.Add(pessoa);
                     }
-                    catch (Exception ex)
+
+                    // Adiciona o novo registro de ponto à lista de registros da pessoa
+                    var registroPonto = new RegistroPontoDto
                     {
-                        Console.WriteLine($"Erro ao processar linha: {linha}. Exceção: {ex.Message}");
-                        throw;
-                    }
+                        Data = data.ToString("dd/MM/yyyy"),
+                        HoraEntrada = entrada,
+                        Almoco = almoco,
+                        HoraSaida = saida,
+                        InicioAlmoco = inicioAlmoco,
+                        FimAlmoco = fimAlmoco,
+                        Pessoa = pessoa
+                    };
+
+                    pessoa.RegistrosPonto.Add(registroPonto);
                 }
-            });
+
+                listaLerArquivosDto.Add(lerArquivoDto);
+
+            }).ToList();
 
             await Task.WhenAll(tarefas);
 
-            return colaboradores.Values.ToList();
+            return listaLerArquivosDto;
         }
-
 
         private async void ValidarDepartamentoDto(DepartamentoDto departamentoDto)
         {
