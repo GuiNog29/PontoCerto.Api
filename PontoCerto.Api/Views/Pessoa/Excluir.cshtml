@@ -15,7 +15,7 @@
     <p>Valor Hora: @Model.ValorHora.ToString("C")</p>
 </div>
 
-<form action="/Pessoa/ExcluirPorId?pessoaId=@Model.Id&&departamentoId = @departamentoId" method="post">
+<form action="/Pessoa/ExcluirPorId?pessoaId=@Model.Id" method="post">
     @Html.AntiForgeryToken()
     <div class="form-group">
         <input type="submit" value="Excluir" class="btn btn-danger" />
