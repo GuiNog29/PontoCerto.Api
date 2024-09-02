@@ -145,7 +145,7 @@ namespace PontoCerto.Api.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ExcluirPorId(int pessoaId)
         {
