@@ -15,7 +15,7 @@ Siga os passos abaixo para configurar e executar o sistema localmente:
 
    ```bash
    dotnet ef database update --project PontoCerto.Infrastructure --startup-project PontoCerto.Api
-  ````
+   `````
 
 4. Executar a Aplicação
-Execute a aplicação utilizando o perfil https.
+   Execute a aplicação utilizando o perfil https.
