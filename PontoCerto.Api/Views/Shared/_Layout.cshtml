@@ -15,7 +15,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav"> 
+            <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" href="@Url.Action("Index", "Departamento")">Gerenciar Departamentos</a>
                 </li>
@@ -33,20 +33,20 @@
 
     <!-- Modal para exibição de erros -->
     <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="errorModalLabel">Erro</h5>
-            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            @TempData["ErrorMessage"]
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-          </div>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel">Erro</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @TempData["ErrorMessage"]
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -77,6 +77,24 @@
             // Define o valor do campo hidden para o caminho da pasta
             document.getElementById('caminhoPasta').value = directoryPath;
         });
+
+            function validateRequiredFields(fields) {
+                var isValid = true;
+
+                fields.forEach(function(fieldId) {
+                    var field = document.getElementById(fieldId);
+                    var errorSpan = document.getElementById(fieldId + "Error");
+
+                    if (field.value.trim() === "") {
+                        errorSpan.style.display = "block";
+                        isValid = false;
+                    } else {
+                        errorSpan.style.display = "none";
+                    }
+                });
+
+                return isValid;
+            }
 
     </script>
 </body>

@@ -5,6 +5,34 @@
 
 <h2>Bem-vindo à Aplicação de Gerenciamento de RH</h2>
 
+<h2>Informações do Candidato</h2>
+
+<div class="form-group">
+    <label>Nome do Candidato:</label>
+    <p>Guilherm Mathias de Almeida</p>
+</div>
+
+<div class="form-group">
+    <label>Cargo Pretendido:</label>
+    <p>Desenvolvedor .NET</p>
+</div>
+
+<div class="form-group">
+    <label>Pretensão Salarial:</label>
+    <p>R$ 5.500,00</p>
+</div>
+
+<div class="form-group">
+    <label>Data do Teste:</label>
+    <p>02/09/2024</p>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <a href="@Url.Action("Sobre", "Home")" class="btn btn-primary btn-lg btn-block">Sobre</a>
+    </div>
+</div>
+
 <p>Escolha uma das opções abaixo para continuar:</p>
 
 <div class="row">
@@ -15,12 +43,13 @@
 
 <div class="row mt-4">
     <div class="col-md-12">
-        <form action="@Url.Action("Importar", "Departamento")" method="post" enctype="multipart/form-data">
+        <form action="@Url.Action("Importar", "Departamento")" method="post" enctype="multipart/form-data" onsubmit="return validateRequiredFields(['caminhoPasta'])">
             @Html.AntiForgeryToken()
 
             <div class="form-group">
                 <label class="control-label">Caminho arquivos .csv</label>
                 <input type="text" id="caminhoPasta" name="caminhoPasta" class="form-control" placeholder="Insira o caminho de onde está os arquivos" />
+                <span id="caminhoPastaError" class="text-danger" style="display:none;">O campo de caminho é obrigatório.</span>
             </div>
             <button type="submit" class="btn btn-secondary btn-lg btn-block">Importar Registros de Ponto (CSV)</button>
         </form>
